@@ -1361,48 +1361,8 @@ body {
 .param-td{text-align:center;font-size:12px;font-weight:700;min-width:52px}
 
 
-/* ===== パラメータ編集モード ===== */
-.edit-mode-bar {
-  display: none;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #1a3a5c;
-  padding: 10px 16px;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 2px solid #f0c040;
-}
-.edit-mode-bar.active { display: flex; }
-.edit-mode-bar .edit-label {
-  color: #f0c040;
-  font-weight: 700;
-  font-size: 13px;
-  flex: 1;
-}
-.edit-mode-bar button {
-  padding: 7px 16px;
-  border-radius: 8px;
-  border: none;
-  font-weight: 700;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: 'Noto Sans JP', sans-serif;
-}
-.btn-toggle-edit {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.4) !important;
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 13px;
-  cursor: pointer;
-  margin: 12px auto 0;
-  display: block;
-  font-family: 'Noto Sans JP', sans-serif;
-}
+
+
 .btn-save-json { background: #27ae60; color: #fff; }
 .btn-cancel-edit { background: #666; color: #fff; }
 
@@ -1796,11 +1756,6 @@ body {
 
 <!-- PLAYERS 2026 SCREEN -->
 <div id="screen-players" class="screen">
-  <div class="edit-mode-bar" id="editModeBar">
-    <span class="edit-label">✏️ 編集モード — 数値をクリックして変更 → 保存でJSONダウンロード</span>
-    <button class="btn-save-json" onclick="saveParamsJSON()">💾 JSONを保存</button>
-    <button class="btn-cancel-edit" onclick="toggleEditMode()">キャンセル</button>
-  </div>
 
   <div class="screen-header">
     <button class="back-btn" onclick="showScreen('title')">← 戻る</button>
@@ -1810,7 +1765,6 @@ body {
     <div class="players-screen-header">
       <h1>⚽ 選手データ一覧</h1>
       <p>日本代表シミュレーター 実装データ（全選手・29パラメータ）</p>
-      <button class="btn-toggle-edit" onclick="toggleEditMode()">✏️ パラメータ編集モード</button>
     </div>
     <div class="players-screen-main" id="players2018-body"></div>
   </div>
@@ -5512,34 +5466,7 @@ function showJsonModal(jsonStr) {
 }
 
 
-var _editMode = false;
 
-function toggleEditMode() {
-  _editMode = !_editMode;
-  document.getElementById('editModeBar').classList.toggle('active', _editMode);
-  // 全パラメータセルを input/span に切り替え
-  document.querySelectorAll('[data-param-cell]').forEach(function(el) {
-    var val = el.dataset.val;
-    var pIdx = el.dataset.paramIdx;
-    var teamKey = el.dataset.teamKey;
-    var playerIdx = el.dataset.playerIdx;
-    if (_editMode) {
-      var inp = document.createElement('input');
-      inp.type = 'number';
-      inp.className = 'param-cell-edit';
-      inp.value = val;
-      inp.min = 40; inp.max = 99;
-      inp.dataset.teamKey = teamKey;
-      inp.dataset.playerIdx = playerIdx;
-      inp.dataset.paramIdx = pIdx;
-      inp.addEventListener('input', function() { onParamInput(this); });
-      el.innerHTML = '';
-      el.appendChild(inp);
-    } else {
-      el.innerHTML = '<span style="color:' + pColor(parseInt(val)) + ';font-weight:600">' + val + '</span>';
-    }
-  });
-}
 
 function pColor(v) {
   return v >= 85 ? '#ff6b6b' : v >= 80 ? '#74b9ff' : v >= 70 ? '#55efc4' : '#aaa';
