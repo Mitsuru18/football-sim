@@ -5553,15 +5553,19 @@ function saveParamsJSON() {
 
 function setResultImage(team1Score, team2Score) {
   const img = document.getElementById('result-img');
+  const wrap = document.getElementById('result-img-wrap');
   if (!img) return;
   if (team1Score > team2Score) {
     img.src = IMG_WIN;
     img.alt = '勝利！';
+    if (wrap) wrap.style.display = '';
   } else if (team1Score < team2Score) {
     img.src = IMG_LOSE;
     img.alt = '敗北...';
+    if (wrap) wrap.style.display = '';
   } else {
     img.src = '';  // 引き分けは画像なし
+    if (wrap) wrap.style.display = 'none';
   }
 }
 
