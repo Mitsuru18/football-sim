@@ -1565,8 +1565,9 @@ body {
     </div>
 
     <div style="display:flex;gap:10px;margin-top:0">
-      <button class="start-btn" style="flex:1" id="btn-kickoff-bottom" onclick="startGame()">⚽ キックオフ！</button>
-      <button class="start-btn" style="flex:1;background:linear-gradient(135deg,#8B0000,#c0392b)" id="btn-multi" onclick="runMultiGame()">📊 10試合</button>
+      <button class="start-btn" style="flex:2" id="btn-kickoff-bottom" onclick="startGame()">⚽ キックオフ！</button>
+      <button class="start-btn" style="flex:1;background:linear-gradient(135deg,#8B0000,#c0392b);font-size:13px" id="btn-multi" onclick="runMultiGame(10)">📊 10</button>
+      <button class="start-btn" style="flex:1;background:linear-gradient(135deg,#4a0080,#7b2cbf);font-size:13px" id="btn-multi100" onclick="runMultiGame(100)">📊 100</button>
     </div>
   </div>
 </div>
@@ -1829,7 +1830,7 @@ const i18n = {
     screenKeyplayer: 'キープレイヤー選択', screenMarked: '要注意プレイヤー選択',
     screenResult: '試合結果', screenMulti: '10試合シミュレーション',
     screenPlayerDetail: '選手データ', screenPlayers: '選手データリスト',
-    btnBack: '← 戻る', btnDecide: '決定', btnKickoff: '⚽ キックオフ！', btnMulti: '📊 10試合',
+    btnBack: '← 戻る', btnDecide: '決定', btnKickoff: '⚽ キックオフ！', btnMulti: '📊 10試合', btnMulti100: '📊 100試合',
     labelStarting: 'スターティングメンバー', labelDrag: 'ドラッグで選手入れ替え',
     labelBench: '控え', labelSystem: 'システム', labelTactics: '戦術',
     labelKeyplayer: 'キープレイヤー', labelMarked: '要注意プレイヤー',
@@ -1874,7 +1875,7 @@ const i18n = {
     screenKeyplayer: 'Select Key Player', screenMarked: 'Select Marked Player',
     screenResult: 'Match Result', screenMulti: '10-Match Simulation',
     screenPlayerDetail: 'Player Data', screenPlayers: 'Player Data List',
-    btnBack: '← Back', btnDecide: 'Confirm', btnKickoff: '⚽ Kick Off!', btnMulti: '📊 10 Matches',
+    btnBack: '← Back', btnDecide: 'Confirm', btnKickoff: '⚽ Kick Off!', btnMulti: '📊 10', btnMulti100: '📊 100',
     labelStarting: 'Starting XI', labelDrag: 'Drag to swap players',
     labelBench: 'Bench', labelSystem: 'Formation', labelTactics: 'Tactics',
     labelKeyplayer: 'Key Player', labelMarked: 'Marked Player',
@@ -1988,6 +1989,7 @@ function applyLang() {
   _setText('btn-kickoff-top',         t('btnKickoff'));
   _setText('btn-kickoff-bottom',      t('btnKickoff'));
   _setText('btn-multi',               t('btnMulti'));
+  _setText('btn-multi100',            t('btnMulti100'));
   // スクリーンタイトル
   _setText('screen-formation-title',    t('screenFormation'));
   _setText('screen-tactics-title',      t('screenTactics'));
@@ -5041,8 +5043,8 @@ function showDuelDetail(el) {
 // ============================================================
 // 10試合シミュレーション
 // ============================================================
-function runMultiGame() {
-  const GAMES = 10;
+function runMultiGame(GAMES) {
+  GAMES = GAMES || 10;
   const t2sys = system_data.findIndex(s => s.name === team2Data.default_system);
   const t2StateBase = {
     systemIdx: t2sys >= 0 ? t2sys : 0,
@@ -5058,6 +5060,7 @@ function runMultiGame() {
   const areaDef = {};  // ベルギー攻撃時の日本守備勝率
   const playerDuel = {};
   const allGoalPatterns = {};
+  const goalScorers = {};
   const gkSave = {};   // GKセーブ率
   const scenesAllMulti = [];
 
@@ -5149,6 +5152,22 @@ function runMultiGame() {
             const gk = sc.offence.name + ' / ' + sc.action;
             if (!allGoalPatterns[gk]) allGoalPatterns[gk] = 0;
             allGoalPatterns[gk]++;
+            // 得点者集計
+            const scorerP = sc.offence.players[sc.offence.lineup[sc.ofsPos]];
+            if (scorerP) {
+              const sk = sc.offence.name + '_' + scorerP.name;
+              if (!goalScorers[sk]) goalScorers[sk] = { name: scorerP.name, en_name: scorerP.en_name, team: sc.offence.name, color: sc.offence.team_color, goals: 0, assists: 0 };
+              goalScorers[sk].goals++;
+            }
+            // アシスト集計（クロス・セットプレーでcrossPos !== ofsPos の場合）
+            if (sc.crossPos !== undefined && sc.crossPos !== sc.ofsPos) {
+              const assistP = sc.offence.players[sc.offence.lineup[sc.crossPos]];
+              if (assistP) {
+                const ak = sc.offence.name + '_' + assistP.name;
+                if (!goalScorers[ak]) goalScorers[ak] = { name: assistP.name, en_name: assistP.en_name, team: sc.offence.name, color: sc.offence.team_color, goals: 0, assists: 0 };
+                goalScorers[ak].assists++;
+              }
+            }
           }
         }
       });
@@ -5295,9 +5314,49 @@ function runMultiGame() {
     return teamName;
   };
 
+  // 得点者・アシスト ランキング（上位3名）
+  (function() {
+    var isEn = window.LANG === 'en';
+    var t1scorers = Object.values(goalScorers)
+      .filter(function(v){return v.team===team1Data.name;})
+      .sort(function(a,b){return (b.goals*10+b.assists)-(a.goals*10+a.assists);})
+      .slice(0,3);
+    var t2scorers = Object.values(goalScorers)
+      .filter(function(v){return v.team===team2Data.name;})
+      .sort(function(a,b){return (b.goals*10+b.assists)-(a.goals*10+a.assists);})
+      .slice(0,3);
+
+    function renderScorers(list, tdata) {
+      if (!list.length) return '<div style="font-size:11px;color:#aaa;padding:6px 0">' + (isEn?'No goals':'得点なし') + '</div>';
+      return list.map(function(v, i) {
+        var medal = i===0?'🥇':i===1?'🥈':'🥉';
+        var dispName = (isEn && v.en_name) ? v.en_name : v.name;
+        return '<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f5f5f5">'
+          + '<span style="font-size:13px">' + medal + '</span>'
+          + '<span style="font-size:12px;font-weight:700;color:' + tdata.team_color + ';flex:1">' + dispName + '</span>'
+          + '<span style="font-size:13px;font-weight:700;color:' + tdata.team_color + '">' + v.goals + (isEn?'G':'点') + '</span>'
+          + (v.assists > 0 ? '<span style="font-size:11px;color:#888;margin-left:4px">' + v.assists + 'A</span>' : '')
+          + '</div>';
+      }).join('');
+    }
+
+    var title = isEn ? '⚽ Top Scorers ('+GAMES+' Matches)' : '⚽ 得点者ランキング（'+GAMES+'試合合算）';
+    var aNote = isEn ? ' <span style="font-size:10px;color:#aaa">* A = cross/set-piece assists</span>'
+                     : ' <span style="font-size:10px;color:#aaa">※Aはクロス・セットプレーのアシスト</span>';
+
+    html += '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
+      + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">' + title + aNote + '</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'
+      + '<div><div style="background:' + team1Data.team_color + ';color:white;font-size:11px;font-weight:700;padding:4px 8px;border-radius:6px 6px 0 0">' + team1Data.flag + ' ' + getTeamName(team1Data) + '</div>'
+      + renderScorers(t1scorers, team1Data) + '</div>'
+      + '<div><div style="background:' + team2Data.team_color + ';color:white;font-size:11px;font-weight:700;padding:4px 8px;border-radius:6px 6px 0 0">' + team2Data.flag + ' ' + getTeamName(team2Data) + '</div>'
+      + renderScorers(t2scorers, team2Data) + '</div>'
+      + '</div></div>';
+  })();
+
   // ポゼッション
   html += '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
-    + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">📊 ' + (window.LANG==='en'?'Possession (10-Match Avg)':'ポゼッション（10試合平均）') + '</div>'
+    + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">📊 ' + (window.LANG==='en'?'Possession ('+GAMES+'-Match Avg)':'ポゼッション（'+GAMES+'試合平均）') + '</div>'
     + '<div style="display:flex;align-items:center;gap:8px;padding:4px 0">'
     + '<div style="font-size:13px;font-weight:700;color:' + team1Data.team_color + ';width:36px;text-align:right">' + _t1poss + '%</div>'
     + '<div style="flex:1;height:14px;border-radius:7px;overflow:hidden;background:#eee;display:flex">'
@@ -5329,7 +5388,7 @@ function runMultiGame() {
   });
   _statsGridHtml += '</div>';
   html += '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
-    + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">📈 ' + (window.LANG==='en'?'Chances / Shots / Saves (Per Match)':'チャンス・シュート・セーブ（1試合平均）') + '</div>'
+    + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">📈 ' + (window.LANG==='en'?'Chances / Shots / Saves (Per Match, '+GAMES+' total)':'チャンス・シュート・セーブ（1試合平均・'+GAMES+'試合）') + '</div>'
     + '<div style="display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:6px">'
     + '<span>' + team1Data.flag + ' ' + getTeamName(team1Data) + '</span>'
     + '<span>' + team2Data.flag + ' ' + getTeamName(team2Data) + '</span>'
@@ -5358,7 +5417,7 @@ function runMultiGame() {
   });
   _mvpHtml += '</div>';
   html += '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
-    + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">🏃 ' + (window.LANG==='en'?'Player Scene Involvement (10 Matches)':'選手別関与シーン数（10試合合算）') + '</div>'
+    + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">🏃 ' + (window.LANG==='en'?'Player Scene Involvement ('+GAMES+' Matches)':'選手別関与シーン数（'+GAMES+'試合合算）') + '</div>'
     + _mvpHtml + '</div>';
 
   // 攻撃パターン別ゴール
@@ -5372,7 +5431,7 @@ function runMultiGame() {
       + '<span style="font-weight:700">⚽×' + e[1] + '</span></div>';
   }).join('') : '<span style="font-size:11px;color:#888">' + (window.LANG==='en'?'No goals':'得点なし') + '</span>';
   html += '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
-    + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">⚽ ' + (window.LANG==='en'?'Goals by Attack Pattern (10 Matches)':'攻撃パターン別ゴール（10試合合算）') + '</div>'
+    + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5">⚽ ' + (window.LANG==='en'?'Goals by Attack Pattern ('+GAMES+' Matches)':'攻撃パターン別ゴール（'+GAMES+'試合合算）') + '</div>'
     + _patHtml + '</div>';
 
 
@@ -5381,12 +5440,12 @@ function runMultiGame() {
   // AI総括ボタン
   html += '<div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
     + '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eef5;display:flex;align-items:center;justify-content:space-between">'
-    + '<span>' + t('multiAiHeader') + '</span>'
-    + '<button id="multi-summary-btn" onclick="generateMultiSummary(' + t1wins + ',' + t2wins + ',' + draws + ',' + _t1poss + ',' + _t1shootTotal + ',' + _t2shootTotal + ')" '
+    + '<span>' + (window.LANG==='en' ? '🤖 AI Summary ('+GAMES+' Matches)' : '🤖 AI総括（'+GAMES+'試合）') + '</span>'
+    + '<button id="multi-summary-btn" onclick="generateMultiSummary(' + t1wins + ',' + t2wins + ',' + draws + ',' + _t1poss + ',' + _t1shootTotal + ',' + _t2shootTotal + ',' + GAMES + ')" '
     + 'style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid #ccc;background:#f5f5f5;color:#333;cursor:pointer;font-family:inherit;font-weight:700">' + t('multiAiBtn') + '</button>'
     + '</div>'
     + '<div id="multi-summary-content" style="font-size:13px;line-height:1.8;color:#555">'
-    + '<span style="font-size:12px;color:#aaa">' + t('multiAiPlaceholder') + '</span>'
+    + '<span style="font-size:12px;color:#aaa">' + (window.LANG==='en' ? 'Press "✨ Generate" for an AI summary of '+GAMES+' matches.' : '「✨ 生成」ボタンを押すと、AIが'+GAMES+'試合を総括します') + '</span>'
     + '</div></div>';
 
   // MVP情報をグローバルに保存（AI総括用）
@@ -5398,6 +5457,15 @@ function runMultiGame() {
   _duelScenesCache = scenesAllMulti;
   el.innerHTML = html;
   buildFieldWithTabs(areaWin, areaDef, 340, 180, 'multi-field-tabs');
+  // 結果画面タイトルを試合数に応じて更新
+  var multiTitle = document.getElementById('screen-multi-title');
+  if (multiTitle) {
+    if (window.LANG === 'en') {
+      multiTitle.textContent = GAMES + '-Match Simulation';
+    } else {
+      multiTitle.textContent = GAMES + '試合シミュレーション';
+    }
+  }
   showScreen('multigame');
 }
 
@@ -6075,7 +6143,7 @@ function generateSummary() {
 }
 
 // ===== AI総括（10試合モード・ルールベース）=====
-function generateMultiSummary(t1wins, t2wins, draws, t1poss, t1shoot, t2shoot) {
+function generateMultiSummary(t1wins, t2wins, draws, t1poss, t1shoot, t2shoot, GAMES) {
   var btn = document.getElementById('multi-summary-btn');
   var el  = document.getElementById('multi-summary-content');
   btn.disabled = true;
@@ -6087,25 +6155,29 @@ function generateMultiSummary(t1wins, t2wins, draws, t1poss, t1shoot, t2shoot) {
   var t1save   = window._t1saveTotal  || 0;
   var t2save   = window._t2saveTotal  || 0;
   var t2poss   = 100 - t1poss;
-  var GAMES    = 10;
+  GAMES = GAMES || 10;
   var isEn     = window.LANG === 'en';
   var t1n      = getTeamName(team1Data);
   var t2n      = getTeamName(team2Data);
 
   // ① 勝敗総評
   var resultText;
+  var domThresh  = Math.round(GAMES * 0.70); // 70%以上 → 圧倒
+  var edgeThresh = Math.round(GAMES * 0.50); // 50%超  → 優位
   if (isEn) {
-    if      (t1wins >= 7) resultText = t1n + ' dominated with ' + t1wins + 'W-' + draws + 'D-' + t2wins + 'L over 10 matches.';
-    else if (t1wins >= 5) resultText = t1n + ' had the edge with ' + t1wins + ' wins across 10 matches.';
-    else if (t1wins === t2wins) resultText = 'An even series — ' + t1wins + 'W-' + draws + 'D-' + t2wins + 'L for both sides.';
-    else if (t2wins >= 7) resultText = t2n + ' dominated the 10-match series with ' + t2wins + ' wins.';
-    else    resultText = t2n + ' edged the series ' + t2wins + 'W-' + draws + 'D-' + t1wins + 'L.';
+    if      (t1wins >= domThresh) resultText = t1n + ' dominated with ' + t1wins + 'W-' + draws + 'D-' + t2wins + 'L over ' + GAMES + ' matches.';
+    else if (t1wins > edgeThresh) resultText = t1n + ' had the edge with ' + t1wins + ' wins across ' + GAMES + ' matches.';
+    else if (t1wins === t2wins)   resultText = 'An even series — ' + t1wins + 'W-' + draws + 'D-' + t2wins + 'L for both sides (' + GAMES + ' matches).';
+    else if (t2wins >= domThresh) resultText = t2n + ' dominated the ' + GAMES + '-match series with ' + t2wins + ' wins.';
+    else if (t2wins > edgeThresh) resultText = t2n + ' had the edge with ' + t2wins + ' wins across ' + GAMES + ' matches.';
+    else                          resultText = t2n + ' edged the series ' + t2wins + 'W-' + draws + 'D-' + t1wins + 'L (' + GAMES + ' matches).';
   } else {
-    if      (t1wins >= 7) resultText = team1Data.name + 'が' + t1wins + '勝' + draws + '分' + t2wins + '敗と圧倒的な強さを見せた。';
-    else if (t1wins >= 5) resultText = team1Data.name + 'が' + t1wins + '勝と優位に立った10試合だった。';
-    else if (t1wins === t2wins) resultText = '両チームが' + t1wins + '勝' + draws + '分' + t2wins + '敗と互角の戦いを繰り広げた。';
-    else if (t2wins >= 7) resultText = team2Data.name + 'が' + t2wins + '勝と10試合を制した。';
-    else    resultText = team2Data.name + 'が' + t2wins + '勝' + draws + '分' + t1wins + '敗と上回った。';
+    if      (t1wins >= domThresh) resultText = team1Data.name + 'が' + t1wins + '勝' + draws + '分' + t2wins + '敗と圧倒的な強さを見せた（' + GAMES + '試合）。';
+    else if (t1wins > edgeThresh) resultText = team1Data.name + 'が' + t1wins + '勝と優位に立った' + GAMES + '試合だった。';
+    else if (t1wins === t2wins)   resultText = '両チームが' + t1wins + '勝' + draws + '分' + t2wins + '敗と互角の戦いを繰り広げた（' + GAMES + '試合）。';
+    else if (t2wins >= domThresh) resultText = team2Data.name + 'が' + t2wins + '勝と' + GAMES + '試合を制した。';
+    else if (t2wins > edgeThresh) resultText = team2Data.name + 'が' + t2wins + '勝と優位に立った' + GAMES + '試合だった。';
+    else                          resultText = team2Data.name + 'が' + t2wins + '勝' + draws + '分' + t1wins + '敗と上回った（' + GAMES + '試合）。';
   }
 
   // ② ポゼッション傾向
@@ -6174,18 +6246,20 @@ function generateMultiSummary(t1wins, t2wins, draws, t1poss, t1shoot, t2shoot) {
 
   // ⑦ 総合評価
   var overallText;
+  var overThresh = Math.round(GAMES * 0.60); // 60%以上 → 上回った
+  var closeThresh = Math.round(GAMES * 0.10); // 10%以内 → 拮抗
   if (isEn) {
-    if      (t1wins >= 6 && t1poss >= 52) overallText = 'Overall, ' + t1n + ' were superior in both tactics and individual quality across the 10 matches.';
-    else if (t2wins >= 6 && t2poss >= 52) overallText = 'Overall, ' + t2n + ' showed their class throughout the series.';
-    else if (t1wins >= 6 && t1poss < 50)  overallText = t1n + ' defended well and made their counter-attacks count.';
-    else if (Math.abs(t1wins-t2wins) <= 1) overallText = 'A closely matched series — either team could have come out on top.';
-    else    overallText = 'An entertaining 10-match series with plenty of highlights.';
+    if      (t1wins >= overThresh && t1poss >= 52) overallText = 'Overall, ' + t1n + ' were superior in both tactics and individual quality across ' + GAMES + ' matches.';
+    else if (t2wins >= overThresh && t2poss >= 52) overallText = 'Overall, ' + t2n + ' showed their class throughout the ' + GAMES + '-match series.';
+    else if (t1wins >= overThresh && t1poss < 50)  overallText = t1n + ' defended well and made their counter-attacks count.';
+    else if (Math.abs(t1wins-t2wins) <= closeThresh) overallText = 'A closely matched series — either team could have come out on top.';
+    else    overallText = 'An entertaining ' + GAMES + '-match series with plenty of highlights.';
   } else {
-    if      (t1wins >= 6 && t1poss >= 52) overallText = '総じて' + team1Data.name + 'が戦術・個人能力ともに上回った10試合だった。';
-    else if (t2wins >= 6 && t2poss >= 52) overallText = '総じて' + team2Data.name + 'の総合力が際立つシリーズとなった。';
-    else if (t1wins >= 6 && t1poss < 50)  overallText = team1Data.name + 'は守備を堅め、カウンターを活かした戦略が奏功した。';
-    else if (Math.abs(t1wins-t2wins) <= 1) overallText = '実力が拮抗しており、どちらが勝ってもおかしくないシリーズだった。';
-    else    overallText = '10試合を通じて多くの見どころがあった。';
+    if      (t1wins >= overThresh && t1poss >= 52) overallText = '総じて' + team1Data.name + 'が戦術・個人能力ともに上回った' + GAMES + '試合だった。';
+    else if (t2wins >= overThresh && t2poss >= 52) overallText = '総じて' + team2Data.name + 'の総合力が際立つシリーズとなった。';
+    else if (t1wins >= overThresh && t1poss < 50)  overallText = team1Data.name + 'は守備を堅め、カウンターを活かした戦略が奏功した。';
+    else if (Math.abs(t1wins-t2wins) <= closeThresh) overallText = '実力が拮抗しており、どちらが勝ってもおかしくないシリーズだった。';
+    else    overallText = GAMES + '試合を通じて多くの見どころがあった。';
   }
 
   var summary = [resultText, possText, shootText, mvpText, patText, saveText, overallText]
