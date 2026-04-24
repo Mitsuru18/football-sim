@@ -1488,7 +1488,7 @@ body {
     <div class="disclaimer-box" id="disclaimer-text">
       ⚠️ 本アプリは個人制作のファン向けシミュレーターです。日本サッカー協会・各チーム・選手等とは一切関係ありません。選手パラメータは独自設定です。商業目的のコンテンツではありません。
     </div>
-    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.0.5</div>
+    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.0.6</div>
   </div>
 </div>
 
@@ -6478,42 +6478,42 @@ function drawShareCanvas(ctx, d, isEn, S) {
   if (d.mode === 'single') {
     var s1=d.score1, s2=d.score2;
     var t1Win=s1>s2, t2Win=s2>s1;
-    var n1Col = t1Win ? CYAN    : 'rgba(122,180,220,0.5)';
-    var n2Col = t2Win ? '#ff5555': colorAlpha(d.color2, 0.6);
+    var n1Col = t1Win ? CYAN : 'rgba(122,180,220,0.5)';
+    var n2Col = t2Win ? '#ff5555' : colorAlpha(d.color2, 0.6);
 
-    // tag
-    roundRect(ctx, cx-130, 80, 260, 36, 18, 'rgba(255,255,255,0.10)');
-    textCenter(ctx, 'MATCH SIMULATION', cx, 104, '700 22px Arial', '#aabbcc');
+    // ① タグ
+    roundRect(ctx, cx-150, 60, 300, 40, 20, 'rgba(255,255,255,0.10)');
+    textCenter(ctx, 'MATCH SIMULATION', cx, 87, '700 22px Arial', '#aabbcc');
 
-    // team names + score
-    var n1Size = t1Win ? '700 52px Arial' : '700 38px Arial';
-    var n2Size = t2Win ? '700 52px Arial' : '700 38px Arial';
-    ctx.font = n1Size; ctx.fillStyle = n1Col; ctx.textAlign = 'right';
-    ctx.fillText(d.flag1+' '+d.name1, cx-80, 250);
-    ctx.font = n2Size; ctx.fillStyle = n2Col; ctx.textAlign = 'left';
-    ctx.fillText(d.flag2+' '+d.name2, cx+80, 250);
+    // ② チーム名（左右に分けて上部に配置）
+    ctx.font = t1Win?'700 48px Arial':'700 36px Arial';
+    ctx.fillStyle = n1Col; ctx.textAlign = 'right';
+    ctx.fillText(d.flag1+' '+d.name1, cx-60, 185, 400);
+    ctx.font = t2Win?'700 48px Arial':'700 36px Arial';
+    ctx.fillStyle = n2Col; ctx.textAlign = 'left';
+    ctx.fillText(d.flag2+' '+d.name2, cx+60, 185, 400);
 
-    // score
-    ctx.font = '900 160px Arial'; ctx.fillStyle = 'white'; ctx.textAlign = 'center';
-    ctx.fillText(s1+'-'+s2, cx, 340);
+    // ③ スコア
+    ctx.font = '900 180px Arial'; ctx.fillStyle = 'white'; ctx.textAlign = 'center';
+    ctx.fillText(s1+'-'+s2, cx, 370);
 
-    // winner badge
-    roundRect(ctx, cx-200, 370, 400, 52, 26, 'rgba(255,255,255,0.10)');
-    textCenter(ctx, d.winner, cx, 404, '700 26px Arial', 'white');
+    // ④ 結果バッジ
+    roundRect(ctx, cx-220, 390, 440, 56, 28, 'rgba(255,255,255,0.10)');
+    textCenter(ctx, d.winner, cx, 426, '700 28px Arial', 'white');
 
-    // possession bar
-    var barY=470, barH=14, barW=720, barX=(S-barW)/2;
-    textCenter(ctx, d.poss1+'%', barX+d.poss1/100*barW-50, barY-14, '700 26px Arial', CYAN);
-    textCenter(ctx, isEn?'Possession':'ポゼッション', cx, barY-14, '400 22px Arial', SUBTEXT);
-    textCenter(ctx, d.poss2+'%', barX+d.poss1/100*barW+50, barY-14, '700 26px Arial', d.color2);
+    // ⑤ ポゼッション（ラベル上・数字バー外側）
+    var barW=760, barX=(S-barW)/2, barY=495, barH=14;
+    textCenter(ctx, isEn?'Possession':'ポゼッション', cx, 472, '400 22px Arial', SUBTEXT);
+    textCenter(ctx, d.poss1+'%', barX-44, barY+12, '700 28px Arial', CYAN);
+    textCenter(ctx, d.poss2+'%', barX+barW+44, barY+12, '700 28px Arial', d.color2);
     roundRect(ctx, barX, barY, barW, barH, 7, d.color2);
     roundRect(ctx, barX, barY, barW*d.poss1/100, barH, 7, CYAN);
 
-    // INSIGHT box
-    roundRect(ctx, 80, 520, S-160, 450, 16, 'rgba(255,255,255,0.07)');
-    textCenter(ctx, 'INSIGHT', cx, 562, '700 22px Arial', GOLD);
+    // ⑥ INSIGHTボックス
+    roundRect(ctx, 60, 548, S-120, 404, 16, 'rgba(255,255,255,0.07)');
+    textCenter(ctx, 'INSIGHT', cx, 590, '700 24px Arial', GOLD);
     ctx.font = '400 28px Arial'; ctx.fillStyle = '#ddeeff'; ctx.textAlign = 'left';
-    insightLines.forEach(function(line, i) { ctx.fillText(line, 110, 610+i*52, S-220); });
+    insightLines.forEach(function(line, i) { ctx.fillText(line, 90, 638+i*56, S-180); });
 
   } else {
     // MULTI
@@ -6524,47 +6524,50 @@ function drawShareCanvas(ctx, d, isEn, S) {
     var n1Col=t1Win?CYAN:'rgba(122,180,220,0.5)';
     var n2Col=t2Win?'#ff5555':colorAlpha(d.color2,0.6);
 
-    // tag
+    // ① タグ
+    ctx.font = '700 20px Arial';
     var tagTxt = gm+'-MATCH SIMULATION';
     var tagW = ctx.measureText(tagTxt).width + 60;
-    roundRect(ctx, cx-tagW/2, 60, tagW, 36, 18, 'rgba(255,255,255,0.10)');
-    textCenter(ctx, tagTxt, cx, 84, '700 20px Arial', '#aabbcc');
+    roundRect(ctx, cx-tagW/2, 50, tagW, 38, 19, 'rgba(255,255,255,0.10)');
+    textCenter(ctx, tagTxt, cx, 76, '700 20px Arial', '#aabbcc');
 
-    // team names
-    ctx.font = t1Win?'700 44px Arial':'700 34px Arial'; ctx.fillStyle=n1Col; ctx.textAlign='right';
-    ctx.fillText(d.flag1+' '+d.name1, cx-40, 180);
-    ctx.font='700 30px Arial'; ctx.fillStyle='#444'; ctx.textAlign='center';
-    ctx.fillText('vs', cx, 180);
-    ctx.font=t2Win?'700 44px Arial':'700 34px Arial'; ctx.fillStyle=n2Col; ctx.textAlign='left';
-    ctx.fillText(d.flag2+' '+d.name2, cx+40, 180);
+    // ② チーム名（左右）
+    ctx.font = t1Win?'700 42px Arial':'700 32px Arial';
+    ctx.fillStyle=n1Col; ctx.textAlign='right';
+    ctx.fillText(d.flag1+' '+d.name1, cx-50, 160, 420);
+    ctx.font='700 28px Arial'; ctx.fillStyle='#555'; ctx.textAlign='center';
+    ctx.fillText('vs', cx, 160);
+    ctx.font = t2Win?'700 42px Arial':'700 32px Arial';
+    ctx.fillStyle=n2Col; ctx.textAlign='left';
+    ctx.fillText(d.flag2+' '+d.name2, cx+50, 160, 420);
 
-    // wins
-    var sz1=t1Win?'900 130px Arial':'900 96px Arial';
-    var sz2=t2Win?'900 130px Arial':'900 96px Arial';
-    ctx.font=sz1; ctx.fillStyle=c1; ctx.textAlign='center';
-    ctx.fillText(t1w, cx-220, 340);
-    ctx.font=sz2; ctx.fillStyle=c2; ctx.textAlign='center';
-    ctx.fillText(t2w, cx+220, 340);
-    textCenter(ctx, 'W ('+t1R+'%)', cx-220, 385, '400 24px Arial', SUBTEXT);
-    textCenter(ctx, 'W ('+t2R+'%)', cx+220, 385, '400 24px Arial', SUBTEXT);
+    // ③ 勝利数
+    ctx.font=t1Win?'900 140px Arial':'900 100px Arial';
+    ctx.fillStyle=c1; ctx.textAlign='center';
+    ctx.fillText(t1w, cx-240, 340);
+    ctx.font=t2Win?'900 140px Arial':'900 100px Arial';
+    ctx.fillStyle=c2; ctx.textAlign='center';
+    ctx.fillText(t2w, cx+240, 340);
+    textCenter(ctx, 'W ('+t1R+'%)', cx-240, 386, '400 26px Arial', SUBTEXT);
+    textCenter(ctx, 'W ('+t2R+'%)', cx+240, 386, '400 26px Arial', SUBTEXT);
 
-    // possession bar
-    var barY=430, barH=12, barW=700, barX=(S-barW)/2;
-    textCenter(ctx, d.poss1+'%', barX+d.poss1/100*barW-50, barY-14, '700 24px Arial', CYAN);
-    textCenter(ctx, isEn?'Possession':'ポゼッション', cx, barY-14, '400 20px Arial', SUBTEXT);
-    textCenter(ctx, d.poss2+'%', barX+d.poss1/100*barW+50, barY-14, '700 24px Arial', d.color2);
+    // ④ ポゼッション（ラベル上・数字外側）
+    var barW=740, barX=(S-barW)/2, barY=432, barH=12;
+    textCenter(ctx, isEn?'Possession':'ポゼッション', cx, 416, '400 22px Arial', SUBTEXT);
+    textCenter(ctx, d.poss1+'%', barX-44, barY+10, '700 26px Arial', CYAN);
+    textCenter(ctx, d.poss2+'%', barX+barW+44, barY+10, '700 26px Arial', d.color2);
     roundRect(ctx, barX, barY, barW, barH, 6, d.color2);
     roundRect(ctx, barX, barY, barW*d.poss1/100, barH, 6, CYAN);
 
-    // INSIGHT box
-    roundRect(ctx, 80, 480, S-160, 470, 16, 'rgba(255,255,255,0.07)');
-    textCenter(ctx, 'INSIGHT', cx, 520, '700 22px Arial', GOLD);
+    // ⑤ INSIGHTボックス
+    roundRect(ctx, 60, 482, S-120, 470, 16, 'rgba(255,255,255,0.07)');
+    textCenter(ctx, 'INSIGHT', cx, 524, '700 24px Arial', GOLD);
     ctx.font='400 26px Arial'; ctx.fillStyle='#ddeeff'; ctx.textAlign='left';
-    insightLines.forEach(function(line, i) { ctx.fillText(line, 110, 568+i*50, S-220); });
+    insightLines.forEach(function(line, i) { ctx.fillText(line, 90, 572+i*54, S-180); });
   }
 
   // watermark
-  textCenter(ctx, 'Football Simulation Lab', S-200, S-24, '400 22px Arial', DIMWHITE);
+  textCenter(ctx, 'Football Simulation Lab', S-180, S-28, '400 22px Arial', DIMWHITE);
 }
 
 
