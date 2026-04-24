@@ -6317,15 +6317,18 @@ function generateShareImage(mode) {
   var cardData = {};
 
   if (mode === 'single') {
+    window._lastSimMode = 'single'; // singleモードフラグをセット
     var score1 = document.getElementById('result-score1').textContent;
     var score2 = document.getElementById('result-score2').textContent;
     var name1  = getTeamName(team1Data);
     var name2  = getTeamName(team2Data);
     var winner = document.getElementById('result-winner').textContent;
-    // ポゼッション
-    var possEl = document.getElementById('poss-bar-t1');
-    var poss1  = possEl ? possEl.style.width.replace('%','') : '50';
-    var poss2  = (100 - parseFloat(poss1)).toFixed(0);
+    // ポゼッションをchanceResultsから正確に計算
+    var t1 = gameState.team1, t2 = gameState.team2;
+    var t1atk = 0, t2atk = 0;
+    chanceResults.forEach(function(res){ res.scenes.forEach(function(s){ if(s.offence===t1) t1atk++; else t2atk++; }); });
+    var poss1 = Math.round(t1atk/(t1atk+t2atk||1)*100);
+    var poss2 = 100 - poss1;
 
     cardData = {
       mode: 'single',
@@ -6343,15 +6346,6 @@ function generateShareImage(mode) {
     var t2wins = window._multiT2wins || 0;
     var draws  = GAMES - t1wins - t2wins;
     var poss1m = window._multiPoss1 || 50;
-    var scorers1 = Object.values(window._multiGoalScorers || {})
-      .filter(function(v){return v.team===team1Data.name;})
-      .sort(function(a,b){return b.goals-a.goals;})
-      .slice(0,3);
-    var scorers2 = Object.values(window._multiGoalScorers || {})
-      .filter(function(v){return v.team===team2Data.name;})
-      .sort(function(a,b){return b.goals-a.goals;})
-      .slice(0,3);
-
     cardData = {
       mode: 'multi',
       games: GAMES,
@@ -6360,7 +6354,6 @@ function generateShareImage(mode) {
       flag1: team1Data.flag, flag2: team2Data.flag,
       t1wins: t1wins, t2wins: t2wins, draws: draws,
       poss1: poss1m, poss2: 100 - poss1m,
-      scorers1: scorers1, scorers2: scorers2,
     };
   }
 
@@ -6409,7 +6402,7 @@ function buildShareCardHtml(d, isEn) {
       var possTrailer = p1 > p2 ? n2 : n1;
 
       // マルチデータがあれば組み合わせる
-      var hasMulti = (window._multiT1wins !== undefined && window._multiT2wins !== undefined);
+      var hasMulti = false; // 1試合のINSIGHTはsingle単体データのみ使用
       var simFav = null, simRate = 0;
       if (hasMulti) {
         var mg = window._multiGAMES || 10;
