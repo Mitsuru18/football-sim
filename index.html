@@ -1496,7 +1496,7 @@ body {
     <div class="disclaimer-box" id="disclaimer-text">
       ⚠️ 本アプリは個人制作のファン向けシミュレーターです。日本サッカー協会・各チーム・選手等とは一切関係ありません。選手パラメータは独自設定です。商業目的のコンテンツではありません。
     </div>
-    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.1.0</div>
+    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.1.2</div>
   </div>
 </div>
 
@@ -5525,6 +5525,10 @@ function runMultiGame(GAMES) {
     }
   }
   showScreen('multigame');
+  // 結果画面のトップにスクロール
+  var multiEl = document.getElementById('screen-multigame');
+  if (multiEl) multiEl.scrollTop = 0;
+  window.scrollTo(0, 0);
 }
 
 function showResult() {
