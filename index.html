@@ -1490,7 +1490,7 @@ body {
     <div class="disclaimer-box" id="disclaimer-text">
       ⚠️ 本アプリは個人制作のファン向けシミュレーターです。日本サッカー協会・各チーム・選手等とは一切関係ありません。選手パラメータは独自設定です。商業目的のコンテンツではありません。
     </div>
-    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.0.1</div>
+    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.0.2</div>
   </div>
 </div>
 
@@ -6361,31 +6361,39 @@ function generateShareImage(mode) {
   // カード用HTMLを生成
   var cardHtml = buildShareCardHtml(cardData, isEn);
 
-  // 一時コンテナに挿入
+  // 一時コンテナに挿入（iframeの外に独立して配置）
+  var wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;width:540px;height:540px;z-index:99999;overflow:hidden;pointer-events:none';
   var container = document.createElement('div');
-  container.style.cssText = 'position:fixed;left:-9999px;top:0;width:540px;height:540px;z-index:9999';
+  container.style.cssText = 'width:540px;height:540px;';
   container.innerHTML = cardHtml;
-  document.body.appendChild(container);
+  wrapper.appendChild(container);
+  document.documentElement.appendChild(wrapper);
 
-  if (!container.firstChild) {
-    document.body.removeChild(container);
+  if (!container.innerHTML) {
+    document.documentElement.removeChild(wrapper);
     alert('Card generation failed. cardHtml length: ' + cardHtml.length);
     return;
   }
 
   // html2canvasで描画
-  html2canvas(container.firstChild, {
+  html2canvas(container, {
     width: 540, height: 540, scale: 2,
-    useCORS: true, backgroundColor: null,
+    useCORS: true, backgroundColor: '#0d1b3e',
     logging: false,
+    allowTaint: true,
+    foreignObjectRendering: false,
+    ignoreElements: function(el) {
+      return el.tagName === 'IFRAME' || el.tagName === 'SCRIPT';
+    },
   }).then(function(canvas) {
-    document.body.removeChild(container);
+    document.documentElement.removeChild(wrapper);
     var link = document.createElement('a');
     link.download = 'football-sim-result.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   }).catch(function(err) {
-    document.body.removeChild(container);
+    document.documentElement.removeChild(wrapper);
     alert('html2canvas error: ' + (err && err.message ? err.message : JSON.stringify(err)));
   });
 }
