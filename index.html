@@ -1460,6 +1460,16 @@ body {
     </div>
 
     <div class="match-list">
+      <div class="match-card" onclick="selectMatch('2026vsオランダ')">
+        <div class="match-date" id="match-date-ned">2026年6月14日 ・ W杯グループステージ</div>
+        <div class="match-flags">
+          <span class="flag-emoji">🇯🇵</span>
+          <span class="vs-text">VS</span>
+          <span class="flag-emoji">🇳🇱</span>
+        </div>
+        <div class="match-title-text" id="match-title-ned">日本 vs オランダ</div>
+        <div class="match-desc" id="match-desc-ned">W杯2026グループF。日本とオランダが同組で激突！</div>
+      </div>
       <div class="match-card" onclick="selectMatch('2026vsイングランド')">
         <div class="match-date" id="match-date-eng">2026年3月31日 ・ 親善試合</div>
         <div class="match-flags">
@@ -1480,7 +1490,7 @@ body {
         <div class="match-title-text" id="match-title-sco">日本 vs スコットランド</div>
         <div class="match-desc" id="match-desc-sco">W杯前最後の強化試合。若手中心の布陣でW杯出場国スコットランドに挑む！</div>
       </div>
-      <div class="match-card" onclick="selectMatch('2018vsベルギー')">
+<div class="match-card" onclick="selectMatch('2018vsベルギー')">
         <div class="match-date" id="match-date-bel">2018年7月2日 ・ ロシアW杯 決勝トーナメント</div>
         <div class="match-flags">
           <span class="flag-emoji">🇯🇵</span>
@@ -1496,7 +1506,7 @@ body {
     <div class="disclaimer-box" id="disclaimer-text">
       ⚠️ 本アプリは個人制作のファン向けシミュレーターです。日本サッカー協会・各チーム・選手等とは一切関係ありません。選手パラメータは独自設定です。商業目的のコンテンツではありません。
     </div>
-    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.2.0</div>
+    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.3.4</div>
   </div>
 </div>
 
@@ -1831,6 +1841,13 @@ body {
 
 <script>
 // ============================================================
+// 🗒️ 開発アイデアメモ
+// ============================================================
+// 【検討中】
+// ・戦術「プレス」が優位過ぎるので「体力消費」の概念を実装
+//   → プレス時は体力の消費が早くなるようにする
+//   → ただし10試合・100試合への影響を要検討
+// ============================================================
 // i18n
 // ============================================================
 window.LANG = 'en';
@@ -1838,6 +1855,7 @@ window.LANG = 'en';
 const i18n = {
   ja: {
     titleMain: '',
+    matchDateNed: '2026年6月14日 ・ W杯グループステージ', matchTitleNed: '日本 vs オランダ', matchDescNed: 'W杯2026グループF。日本とオランダが同組で激突！',
     matchDateEng: '2026年3月31日 ・ 親善試合', matchDateSco: '2026年3月28日 ・ 親善試合', matchDateBel: '2018年7月2日 ・ ロシアW杯 決勝トーナメント',
     matchTitleEng: '日本 vs イングランド', matchTitleSco: '日本 vs スコットランド', matchTitleBel: '日本 vs ベルギー',
     matchDescEng: '主力をスタメン起用した日本がフォーデン・パーマー擁するイングランドに挑む！',
@@ -1884,6 +1902,7 @@ const i18n = {
   },
   en: {
     titleMain: '',
+    matchDateNed: 'June 14, 2026 · World Cup Group Stage', matchTitleNed: 'Japan vs Netherlands', matchDescNed: 'WC 2026 Group F — Japan and Netherlands in the same group!',
     matchDateEng: 'March 31, 2026 · Friendly', matchDateSco: 'March 28, 2026 · Friendly', matchDateBel: 'July 2, 2018 · Russia WC Round of 16',
     matchTitleEng: 'Japan vs England', matchTitleSco: 'Japan vs Scotland', matchTitleBel: 'Japan vs Belgium',
     matchDescEng: "Japan fields their best XI against Foden & Palmer's England!",
@@ -1982,6 +2001,7 @@ function _setHTML(id,html){var e=document.getElementById(id);if(e)e.innerHTML=ht
 
 function applyLang() {
   _setHTML('title-main-text', t('titleMain'));
+  _setText('match-date-ned', t('matchDateNed')); _setText('match-title-ned', t('matchTitleNed')); _setText('match-desc-ned', t('matchDescNed'));
   _setText('match-date-eng', t('matchDateEng')); _setText('match-date-sco', t('matchDateSco')); _setText('match-date-bel', t('matchDateBel'));
   _setText('match-title-eng', t('matchTitleEng')); _setText('match-title-sco', t('matchTitleSco')); _setText('match-title-bel', t('matchTitleBel'));
   _setText('match-desc-eng', t('matchDescEng')); _setText('match-desc-sco', t('matchDescSco')); _setText('match-desc-bel', t('matchDescBel'));
@@ -2095,7 +2115,28 @@ const PLAYER_EXTRA = {"川島": {"longName": "川島永嗣", "height": 185, "wei
 "小川": {"profile": "186cmの長身とポストプレーを武器とする生粋のストライカー。ゴールへの嗅覚と空中戦の強さで前線の基準点となり、どんな形でもゴールをこじ開ける。", "profile_en": "A natural striker at 186cm who uses his aerial ability and hold-up play. Possesses a poacher's instinct and finds ways to score in any situation.", "height": 186, "weight": 78},
 "町野": {"profile": "献身的なプレースタイルと高い得点力を兼ね備えるCF。ポストプレーと抜け出しを使い分け、チームの攻撃を活性化する勤勉なストライカー。", "profile_en": "A hard-working striker who combines dedicated pressing with a high goal return. A diligent forward who activates the attack by mixing hold-up play and runs in behind.", "height": 185, "weight": 78},
 "塩貝": {"profile": "スピードとテクニックを活かした縦への突破が武器の若き刺客。国際デビューでも物おじしない積極的なプレースタイルで評価急上昇中。", "profile_en": "A young forward whose speed and technical dribbling on the vertical are his weapons. His fearless style of play even on the international stage is drawing rapid praise.", "height": 183, "weight": 76},
-"佐藤龍": {"profile": "鋭いドリブルとアイデア溢れるプレーで攻撃に変化をもたらす若手OMF。年齢を感じさせない技術力と視野の広さでW杯世代の代表争いに割り込む。", "profile_en": "A young attacking midfielder who brings creativity and clever movement to Japan's attack. His technical ability and wide vision belie his age, as he forces his way into World Cup generation contention.", "height": 175, "weight": 68}
+"佐藤龍": {"profile": "鋭いドリブルとアイデア溢れるプレーで攻撃に変化をもたらす若手OMF。年齢を感じさせない技術力と視野の広さでW杯世代の代表争いに割り込む。", "profile_en": "A young attacking midfielder who brings creativity and clever movement to Japan's attack. His technical ability and wide vision belie his age, as he forces his way into World Cup generation contention.", "height": 175, "weight": 68},
+"冨安": {"profile": "守備力・パス精度ともに世界水準のCB/SB。イングランドの強豪クラブで欧州トップリーグを経験し、日本代表の最終ラインを高次元で統率する。", "profile_en": "A CB/SB with world-class defensive ability and passing precision. With experience at a top English club in Europe's top league, he organises Japan's defensive line at the highest level.", "height": 188, "weight": 76},
+"守田": {"profile": "ポルトガルの強豪クラブのレギュラーとして欧州でも高い評価を受けるDMF。攻守のバランスが良く、インターセプト能力と正確なパスで中盤を制圧する。", "profile_en": "A DMF highly regarded in Europe as a regular for a top Portuguese club. His well-balanced play, interception ability and accurate passing dominate the midfield.", "height": 178, "weight": 75},
+"遠藤航": {"profile": "イングランドの強豪クラブで主力を張るキャプテン。圧倒的なスタミナとインターセプト力で中盤を制圧し、代表の精神的支柱として君臨する。", "profile_en": "Japan's captain who has established himself at a top English club. His extraordinary stamina and interception ability dominate the midfield, and his leadership is the backbone of the national team.", "height": 178, "weight": 75},
+"久保": {"profile": "スペインリーグで欧州トップレベルの技術と創造性を示すOMF。狭いスペースでのドリブルと的確なラストパスは日本代表攻撃の切り札となる。", "profile_en": "An OMF who demonstrates world-class technique and creativity in La Liga. His dribbling in tight spaces and precise final passes make him Japan's attacking trump card.", "height": 173, "weight": 68},
+"フェルブルッヘン": {"profile": "長身を活かしたハイボール処理と安定したセービングを誇るオランダの守護神。イングランドの強豪クラブで欧州舞台を経験し、堅実なポジショニングと一対一の強さが武器。", "profile_en": "Netherlands' shot-stopper with excellent aerial presence and reliable shot-stopping. His experience at a top English club and composed positioning under pressure make him a steady presence in goal.", "height": 197, "weight": 88},
+"ファン・ダイク": {"profile": "世界最高峰のCBとして君臨するオランダの主将。圧倒的な空中戦と冷静な読みで最終ラインを統率し、対峙するFWに対して無類の強さを発揮する。", "profile_en": "The Netherlands' captain and one of the world's best defenders. His aerial dominance, composure and leadership define the Dutch backline, making him near-impossible to beat in the air.", "height": 193, "weight": 92},
+"ファン・デ・フェン": {"profile": "190cmを超える長身に加え、CBとしては破格のスピードを誇るプレミアリーグを代表するCB。カバーリングの広さと縦への推進力が欧州で高く評価される。", "profile_en": "A towering CB in the Premier League who combines imposing height with exceptional pace. His covering range and ability to step out and drive forward make him one of Europe's most dynamic defenders.", "height": 190, "weight": 83},
+"ティンバー": {"profile": "CB・SB・DMFと複数ポジションをこなすユーティリティ性が魅力のプレミアリーグDF。精度の高いパスと強度あるデュエルで攻守に貢献する。", "profile_en": "A versatile Premier League defender comfortable at CB, SB or DM. His accurate passing and aggressive dueling make him a key building block for both club and country.", "height": 181, "weight": 78},
+"ドゥムフリース": {"profile": "イタリアリーグで活躍するパワフルな右SB。攻撃参加の積極性とクロス精度が高く、相手の左サイドを上下動で圧倒する。", "profile_en": "A powerful right-back in Serie A known for dynamic overlapping runs and quality delivery. His energy and attacking intent stretch opponents' left flank throughout the game.", "height": 188, "weight": 86},
+"グラーフェンベルフ": {"profile": "イングランドの強豪クラブで急成長を遂げたダイナミックなDMF。走力と対人の強さで中盤を制圧し、ロングレンジのパスでゲームを動かす。", "profile_en": "A dynamic Premier League DM who has grown into one of Europe's best. His engine, physicality and ability to switch play with long passes make him the anchor of the Dutch midfield.", "height": 188, "weight": 84},
+"デ・ヨング": {"profile": "スペインリーグが誇る天才的な司令塔。狭いスペースを抜け出すドリブルと正確なパスで試合を支配し、オランダ中盤の心臓として機能する。", "profile_en": "A midfield maestro in La Liga and the heartbeat of the Netherlands. His unique ability to dribble out of tight spaces and distribute with precision gives the Dutch complete control of tempo.", "height": 180, "weight": 74},
+"レインデルス": {"profile": "欧州最高峰の舞台で輝くCMF。攻守のバランスが抜群で、推進力あるボール運びとミドルシュートが持ち味。", "profile_en": "A dynamic CMF who shines at the highest level in Europe. His superb two-way play, progressive carrying and long-range shooting ability make him one of the most complete midfielders in international football.", "height": 183, "weight": 78},
+"シモンズ": {"profile": "フランスリーグが誇る若き天才プレーメーカー。ドリブル技術とラストパスの質はすでに世界最高水準に達しており、狭いスペースでの崩しが圧倒的。", "profile_en": "A young genius playmaker in Ligue 1. His dribbling and final-third creativity are already at world-class level — in tight spaces he is virtually unstoppable, a constant danger to any defence.", "height": 174, "weight": 72},
+"ガクポ": {"profile": "イングランドの強豪クラブで活躍する多才なアタッカー。左ウイングとCFをこなす器用さに加え、強いフィジカルと正確なシュートで安定したゴール量産を続ける。", "profile_en": "A versatile Premier League attacker who can play as a winger or striker. His physical strength, intelligent movement and clinical finishing ensure he is a constant threat wherever he plays.", "height": 189, "weight": 82},
+"デパイ": {"profile": "オランダ代表歴代最多得点者。左足の爆発力と個人技は健在で、ゴール前での閃きと豊富な経験が攻撃陣を牽引する。", "profile_en": "The Netherlands' all-time top scorer. His explosive left foot and individual skill remain at elite level, with the experience and instinct in front of goal to unlock any defence.", "height": 181, "weight": 78},
+"アーケ": {"profile": "攻撃的なプレースタイルが持ち味のマンシティCB。高い守備能力に加え、最終ラインから積極的に前線に絡む姿勢がクーマン監督に重用される所以。", "profile_en": "A City CB known for his attacking instincts. His solid defending combined with the willingness to push forward and join attacks makes him a unique asset for Koeman's Netherlands.", "height": 181, "weight": 78},
+"ゲールトルイダ": {"profile": "守備の安定性を重視した信頼性の高い右SB。攻撃参加は控えめながら対人守備とポジショニングで相手の右サイドを封じる。", "profile_en": "A reliable right-back who prioritises defensive solidity. While less adventurous going forward, his one-on-one defending and positional discipline make him a consistent presence.", "height": 183, "weight": 78},
+"フリンポン": {"profile": "圧倒的な加速力とドリブル突破力を武器とする爆速右SB。ドイツの強豪クラブで磨かれた攻撃センスとスプリント力で右サイドを完全制圧する。", "profile_en": "A lightning-quick right-back with devastating speed and dribbling. His explosive pace and attacking instincts honed at a top German club make him one of the most dynamic full-backs in the world.", "height": 174, "weight": 75},
+"コーフマンス": {"profile": "イタリアリーグで活躍するオールラウンドMF。豊富な運動量と正確なパスに加え、強烈なシュートで中盤からもゴールを狙える万能型。", "profile_en": "A complete midfielder in Serie A. His high work rate, accurate passing and powerful shooting from midfield make him one of the most reliable options in the Dutch squad.", "height": 183, "weight": 78},
+"ウェグホルスト": {"profile": "高さとパワーを兼備するターゲットマン。ポストプレーと空中戦の強さでオランダの前線を支え、セットプレーでも脅威を発揮する。", "profile_en": "A powerful target man whose aerial ability and hold-up play are his greatest assets. His presence disrupts defences and provides a reliable focal point for the Dutch attack.", "height": 197, "weight": 86},
+"ラングカンプ": {"profile": "テクニカルなポストプレーとドリブル技術を備えた次世代CF。ゴール前での柔軟な動きでDFを翻弄し、多彩な得点パターンでオランダの新たなエースを目指す。", "profile_en": "A next-generation striker with technical hold-up play and dribbling ability. His clever movement and variety of finishing make him a modern centre-forward for Netherlands' future.", "height": 193, "weight": 86}
 };
 
 const PARAM_NAMES = [
@@ -2595,7 +2636,6 @@ function getScenarioData() {
       {name:"大迫敬",en_name:"Osako K.",long_name:"大迫敬介",positions:["GK"],params:[73,72,67,66,82,76,67,50,51,59,65,50,50,50,50,60,53,40,60,60,40,70,45,82,78,60,74,76,75]},
       {name:"早川",en_name:"Hayakawa",long_name:"早川友基",positions:["GK"],params:[72,69,65,64,80,74,65,50,51,58,61,50,50,50,50,60,51,40,60,60,40,70,45,80,76,60,73,74,75]},
       {name:"谷口",en_name:"Taniguchi",long_name:"谷口彰悟",positions:["CB","右CB"],params:[82,78,74,73,77,83,73,59,59,72,73,64,66,58,58,58,65,59,78,82,82,83,73,51,51,80,74,78,75]},
-      {name:"橋岡",en_name:"Hashioka",long_name:"橋岡大樹",positions:["右SB","CB","右SMF"],params:[74,82,78,77,76,73,76,69,72,72,70,65,67,60,57,58,69,69,74,75,70,74,73,51,51,68,76,74,75]},
       {name:"鈴木淳",en_name:"Suzuki J.",long_name:"鈴木淳之介",positions:["左CB","CB"],params:[78,76,73,72,75,80,72,68,56,83,86,72,74,57,55,55,76,70,74,79,79,81,70,51,51,75,73,74,75]},
       {name:"三笘",en_name:"Mitoma",long_name:"三笘薫",positions:["左OMF","OMF","左SMF","WG"],params:[67,74,80,90,83,63,88,93,88,79,76,77,73,73,67,67,86,88,59,53,45,61,66,50,50,59,81,78,76]},
       {name:"堂安",en_name:"Doan",long_name:"堂安律",positions:["右SMF","OMF","WG"],params:[73,80,78,79,80,72,80,80,76,80,76,76,75,76,73,73,80,78,74,68,58,72,83,51,51,67,80,78,75]},
@@ -2603,7 +2643,6 @@ function getScenarioData() {
       {name:"伊東",en_name:"Ito J.",long_name:"伊東純也",positions:["右OMF","OMF","右SMF","WG"],params:[69,80,90,90,82,66,87,84,96,73,69,86,85,74,80,61,76,91,58,53,43,54,69,51,51,59,78,74,75]},
       {name:"鎌田",en_name:"Kamada",long_name:"鎌田大地",positions:["CMF","OMF","DMF"],params:[73,80,75,76,82,69,80,78,74,83,83,72,73,85,81,81,92,80,66,59,53,58,69,51,51,66,82,78,75]},
       {name:"佐野海",en_name:"Sano K.",long_name:"佐野海舟",positions:["DMF","CMF"],params:[78,82,74,74,82,74,74,72,72,79,76,72,72,69,65,64,73,73,83,80,76,76,78,51,51,72,78,78,75]},
-      {name:"小川",en_name:"Ogawa",long_name:"小川航基",positions:["CF"],params:[80,78,76,75,78,80,73,69,69,69,67,76,76,73,59,58,67,80,53,51,43,53,65,51,51,74,78,76,75]},
       {name:"町野",en_name:"Machino",long_name:"町野修斗",positions:["CF"],params:[76,80,76,76,78,76,73,67,67,67,65,73,73,69,58,56,65,76,54,53,44,53,61,51,51,72,76,74,75]},
       {name:"上田",en_name:"Ueda",long_name:"上田綺世",positions:["CF"],params:[82,80,78,76,80,80,73,73,73,73,69,78,78,74,65,65,74,83,50,48,43,51,65,51,51,76,80,78,75]},
       {name:"塩貝",en_name:"Shiokai",long_name:"塩貝健人",positions:["CF","WG"],params:[74,82,82,83,78,72,80,74,74,72,68,73,73,69,59,59,72,74,58,54,44,54,67,51,51,69,78,74,75]}
@@ -2625,6 +2664,67 @@ function getScenarioData() {
       {name:"マクトミネイ",en_name:"McTominay",long_name:"スコット・マクトミネイ",positions:["CMF","OMF","DMF"],params:[82,83,75,74,82,75,76,74,72,68,79,78,78,75,70,68,76,80,78,77,72,72,76,50,50,73,80,83,75]},
       {name:"ダイクス",en_name:"Dykes",long_name:"リンドン・ダイクス",positions:["CF"],params:[83,80,74,73,78,80,72,68,67,68,66,76,76,70,60,58,66,80,65,65,48,55,66,50,50,77,76,76,75]},
       {name:"コンウェイ",en_name:"Conway",long_name:"トミー・コンウェイ",positions:["CF","WG"],params:[74,80,78,79,78,71,78,73,74,70,67,73,73,70,62,62,71,76,65,62,50,55,68,50,50,65,76,75,75]}
+    ]
+  },
+  japan2026vsNetherlands: {
+    name:"日本",en_name:"Japan",team_color:"#003087",flag:"🇯🇵",
+    default_system:"3-4-2-1", default_tactics:1, default_keyplayer:9, default_marked_player:1,
+    default_lineup:[0,1,2,3,4,5,10,6,8,7,9,10],
+    players:[
+      {name:"鈴木彩",en_name:"Suzuki A.",long_name:"鈴木彩艶",positions:["GK"],params:[75,74,69,68,86,78,69,50,51,73,73,50,50,50,50,60,54,40,60,60,40,70,45,85,82,60,78,82,75]},
+      {name:"谷口",en_name:"Taniguchi",long_name:"谷口彰悟",positions:["CB","右CB"],params:[78,74,74,64,82,84,72,60,60,74,74,56,56,56,54,56,62,60,86,88,88,84,76,51,51,80,76,80,75]},
+      {name:"渡辺",en_name:"Watanabe",long_name:"渡辺剛",positions:["CB"],params:[76,74,72,72,80,80,72,58,58,68,66,54,54,54,52,54,60,58,84,86,84,80,74,51,51,76,74,76,75]},
+      {name:"伊藤洋",en_name:"Ito Y.",long_name:"伊藤洋輝",positions:["左CB","CB","左SB"],params:[78,80,76,75,80,80,76,68,68,82,80,62,62,60,58,60,70,64,84,84,82,82,76,51,51,74,78,78,75]},
+      {name:"佐野海",en_name:"Sano K2.",long_name:"佐野海舟",positions:["DMF","CMF"],params:[78,88,76,75,84,76,76,68,68,76,74,66,64,60,56,58,68,68,88,84,80,78,82,50,50,66,76,74,75]},
+      {name:"鎌田",en_name:"Kamada",long_name:"鎌田大地",positions:["CMF","OMF","DMF"],params:[76,80,76,76,82,72,78,84,80,88,84,84,80,74,72,70,86,80,76,72,66,70,76,50,50,68,82,78,75]},
+      {name:"中村敬",en_name:"Nakamura K.",long_name:"中村敬斗",positions:["左SMF","OMF","WG"],params:[78,82,84,84,80,72,84,84,82,80,76,80,78,72,66,66,80,78,68,62,52,60,72,51,51,68,80,76,75]},
+      {name:"三笘",en_name:"Mitoma",long_name:"三笘薫",positions:["左SMF","OMF","左OMF","WG","左SB"],params:[78,84,88,90,84,72,92,96,92,84,80,84,82,74,66,68,88,80,68,62,52,60,74,51,51,68,84,78,75]},
+      {name:"伊東",en_name:"Ito J.",long_name:"伊東純也",positions:["右SMF","WG","右OMF"],params:[74,84,92,90,82,70,84,84,86,80,76,80,78,70,62,62,78,78,66,62,52,60,72,51,51,68,82,76,75]},
+      {name:"上田",en_name:"Ueda",long_name:"上田綺世",positions:["CF"],params:[82,78,78,76,78,84,74,76,74,76,72,84,82,74,62,62,74,84,62,56,50,54,68,51,51,84,80,78,75]},
+      {name:"堂安",en_name:"Doan",long_name:"堂安律",positions:["右SMF","OMF","右OMF"],params:[78,78,80,80,82,74,80,84,80,84,80,86,82,76,72,70,82,80,72,66,58,64,74,51,51,72,80,78,75]},
+      {name:"大迫敬",en_name:"Osako K.",long_name:"大迫敬介",positions:["GK"],params:[72,72,67,66,84,76,67,50,51,69,69,50,50,50,50,60,52,40,60,60,40,68,45,82,80,58,76,80,75]},
+      {name:"早川",en_name:"Hayakawa",long_name:"早川友基",positions:["GK"],params:[70,70,65,64,82,76,65,50,51,67,67,50,50,50,50,60,50,40,60,60,40,66,45,80,86,58,74,78,75]},
+      {name:"菅原",en_name:"Sugawara",long_name:"菅原由勢",positions:["右SB","右SMF","CB"],params:[76,82,80,79,80,76,78,70,72,78,74,70,70,64,60,60,70,70,76,76,72,76,74,51,51,68,76,74,75]},
+      {name:"冨安",en_name:"Tomiyasu",long_name:"冨安健洋",positions:["右CB","CB","右SB","左SB"],params:[82,80,78,76,84,82,76,64,64,76,75,64,64,58,58,60,68,65,86,88,88,86,82,51,51,82,80,80,75]},
+      {name:"瀬古",en_name:"Seko",long_name:"瀬古歩夢",positions:["CB","右CB"],params:[76,76,74,72,80,80,74,60,60,72,70,56,56,56,54,56,62,60,84,86,84,82,74,51,51,78,74,78,75]},
+      {name:"鈴木淳",en_name:"Suzuki J.",long_name:"鈴木淳之介",positions:["左CB","CB","左SB"],params:[74,76,74,74,78,78,74,62,62,72,70,58,58,56,54,56,62,60,82,84,82,80,72,51,51,72,74,76,75]},
+      {name:"藤田チ",en_name:"Fujita J.",long_name:"藤田譲瑠チマ",positions:["DMF","CMF"],params:[78,84,76,74,84,74,78,72,70,82,80,70,68,64,60,60,74,70,86,82,78,76,82,50,50,66,78,76,75]},
+      {name:"鈴木唯",en_name:"Suzuki Y.",long_name:"鈴木唯人",positions:["OMF","CMF","右SMF"],params:[76,78,78,78,82,68,80,84,80,84,80,82,78,74,70,70,84,78,66,60,52,58,70,50,50,66,80,76,75]},
+      {name:"田中碧",en_name:"Tanaka A.",long_name:"田中碧",positions:["CMF","DMF"],params:[76,82,74,74,80,72,76,74,72,84,82,74,72,68,64,62,76,72,80,78,76,76,78,50,50,66,78,76,75]},
+      {name:"守田",en_name:"Morita",long_name:"守田英正",positions:["DMF","CMF"],params:[76,84,76,75,83,72,76,74,73,83,82,74,74,70,67,65,78,75,84,80,78,76,80,50,50,68,79,77,75]},
+      {name:"遠藤航",en_name:"Endo W.",long_name:"遠藤航",positions:["DMF","CMF","CB","右SB"],params:[80,88,76,74,86,78,76,72,70,82,80,72,70,68,64,62,74,72,92,88,84,84,86,50,50,72,80,80,75]},
+      {name:"久保",en_name:"Kubo",long_name:"久保建英",positions:["OMF","右SMF","右WG"],params:[72,78,79,80,82,66,84,88,84,86,82,86,84,80,74,74,90,85,62,56,48,56,68,51,51,68,82,80,75]},
+      {name:"町野",en_name:"Machino",long_name:"町野修斗",positions:["CF"],params:[78,78,74,72,76,78,72,68,68,68,64,76,74,66,58,58,66,78,58,54,48,52,64,51,51,76,76,74,75]},
+      {name:"前田大",en_name:"Maeda",long_name:"前田大然",positions:["WG","左SMF","CF"],params:[74,92,92,92,82,72,84,76,80,74,70,74,72,66,58,60,68,74,66,60,50,58,70,51,51,66,80,74,75]},
+      {name:"塩貝",en_name:"Shiokkai",long_name:"塩貝健人",positions:["CF","WG"],params:[76,80,84,84,78,70,82,80,80,72,68,78,76,70,62,62,72,78,60,54,48,52,66,51,51,72,78,74,75]}
+    ]
+  },
+  netherlands2026: {
+    name:"オランダ",en_name:"Netherlands",team_color:"#FF6600",flag:"🇳🇱",
+    default_system:"4-1-2-3", default_tactics:1, default_keyplayer:8, default_marked_player:1,
+    default_lineup:[0,4,1,2,3,5,7,6,8,9,10,11],
+    players:[
+      {name:"フェルブルッヘン",en_name:"Flekken",long_name:"バルト・フェルブルッヘン",positions:["GK"],params:[78,74,74,72,83,74,72,50,51,64,68,50,50,50,50,60,52,40,62,62,40,72,45,83,84,62,80,80,75]},
+      {name:"ファン・ダイク",en_name:"Van Dijk",long_name:"フィルヒル・ファン・ダイク",positions:["CB","右CB"],params:[90,82,78,75,90,96,80,65,65,80,80,66,68,58,58,62,68,65,86,88,86,88,78,51,51,94,82,88,78]},
+      {name:"ファン・デ・フェン",en_name:"Van de Ven",long_name:"ミッキー・ファン・デ・フェン",positions:["CB","左CB"],params:[84,82,86,86,82,82,82,66,66,74,74,62,62,56,56,58,66,62,80,82,80,82,74,51,51,80,80,80,75]},
+      {name:"ティンバー",en_name:"Timber",long_name:"ユリエン・ティンバー",positions:["左SB","CB","DMF"],params:[80,82,80,80,80,78,80,72,72,76,74,68,68,60,58,60,72,68,78,80,78,76,74,51,51,74,80,78,75]},
+      {name:"ドゥムフリース",en_name:"Dumfries",long_name:"デンゼル・ドゥムフリース",positions:["右SB","右SMF"],params:[84,88,80,78,80,80,78,70,70,72,70,70,70,62,58,60,70,70,76,78,72,76,72,51,51,72,80,76,75]},
+      {name:"グラーフェンベルフ",en_name:"Gravenberch",long_name:"ライアン・グラーフェンベルフ",positions:["DMF","CMF"],params:[82,86,80,80,82,82,76,74,72,84,82,74,74,68,66,64,78,74,80,78,76,78,78,50,50,72,82,80,75]},
+      {name:"デ・ヨング",en_name:"De Jong",long_name:"フレンキー・デ・ヨング",positions:["CMF","DMF","OMF"],params:[78,84,78,78,82,76,80,88,84,92,90,82,80,74,70,70,88,82,76,74,70,74,76,50,50,70,86,82,75]},
+      {name:"レインデルス",en_name:"Reijnders",long_name:"ティジャニ・レインデルス",positions:["CMF","OMF","DMF"],params:[80,84,80,80,80,76,78,82,78,88,86,82,80,76,72,72,84,82,74,70,68,72,76,50,50,72,84,80,75]},
+      {name:"シモンズ",en_name:"Simons",long_name:"シャビ・シモンズ",positions:["OMF","CMF","左SMF","右SMF","右WG"],params:[74,82,78,80,80,70,84,86,84,90,88,80,78,78,78,78,86,82,66,60,54,60,74,50,50,66,86,82,75]},
+      {name:"ガクポ",en_name:"Gakpo",long_name:"コーディ・ガクポ",positions:["左SMF","CF","OMF","左WG"],params:[80,84,80,80,80,76,78,84,82,84,82,84,82,76,70,70,82,82,70,66,56,64,78,50,50,78,82,80,75]},
+      {name:"デパイ",en_name:"Depay",long_name:"メンフィス・デパイ",positions:["CF","左SMF","OMF"],params:[80,82,80,80,78,76,80,84,80,86,84,82,80,76,74,74,84,82,64,58,50,58,72,50,50,78,82,80,75]},
+      {name:"フラーフェンベルフM",en_name:"M.Gravenberch",long_name:"マイカ・グラーフェンベルフ",positions:["GK"],params:[76,72,72,70,86,76,70,50,51,60,64,50,50,50,50,60,50,40,62,62,40,70,45,86,82,60,76,76,75]},
+      {name:"アーケ",en_name:"Ake",long_name:"ナタン・アーケ",positions:["CB","左CB","左SB"],params:[82,80,78,76,84,84,78,66,66,76,76,64,64,58,56,58,68,64,88,88,88,88,80,51,51,82,80,80,75]},
+      {name:"ゲールトルイダ",en_name:"Geertruida",long_name:"ルイシュ・ゲールトルイダ",positions:["右SB","CB","右SMF"],params:[80,84,82,82,82,78,80,70,70,74,72,70,70,62,58,60,70,70,82,82,78,80,80,51,51,72,80,78,75]},
+      {name:"フリンポン",en_name:"Frimpong",long_name:"ジェレミー・フリンポン",positions:["右SB","右SMF"],params:[78,88,90,90,82,74,88,80,82,72,68,74,72,64,58,60,76,72,74,72,66,72,76,51,51,68,80,74,75]},
+      {name:"フェーネホール",en_name:"Veenhoven",long_name:"ヤン・フェーネホール",positions:["DMF","CMF"],params:[78,82,76,75,82,74,76,72,70,80,78,72,72,68,64,62,74,72,80,78,76,74,80,50,50,68,78,76,75]},
+      {name:"コーフマンス",en_name:"Koopmeiners",long_name:"テウン・コーフマンス",positions:["CMF","DMF","OMF"],params:[80,82,78,78,84,76,80,80,76,86,84,82,80,76,72,72,82,80,80,76,74,76,80,50,50,72,82,80,75]},
+      {name:"マーテン",en_name:"Marten",long_name:"マーテン・デ・ローン",positions:["DMF","CMF"],params:[78,80,72,72,80,74,74,72,70,78,76,70,70,66,62,60,72,70,82,80,78,76,78,50,50,66,78,76,75]},
+      {name:"フラッペン",en_name:"Flappen",long_name:"ブライアン・ブロビー",positions:["CF"],params:[82,82,80,80,78,82,76,72,72,74,70,78,76,68,58,58,70,82,62,58,50,56,68,51,51,80,78,76,75]},
+      {name:"ウェグホルスト",en_name:"Weghorst",long_name:"ウォウト・ウェグホルスト",positions:["CF"],params:[84,80,76,74,78,90,74,70,70,72,70,74,74,68,58,58,68,80,64,60,52,58,68,51,51,84,80,78,75]},
+      {name:"ラングカンプ",en_name:"Zirkzee",long_name:"ヨシュア・ジルクゼー",positions:["CF","OMF"],params:[80,80,80,80,80,78,80,82,78,82,80,82,80,74,68,68,80,82,62,58,50,56,70,51,51,76,82,80,75]}
     ]
   },
 };
@@ -2883,6 +2983,8 @@ function showScreen(name) {
       {data: TEAM_DATA.japan2026vsEngland, key: 'japan2026vsEngland'},
       {data: TEAM_DATA.england2026,        key: 'england2026'},
       {data: TEAM_DATA.scotland2026,       key: 'scotland2026'},
+      {data: TEAM_DATA.japan2026vsNetherlands, key: 'japan2026vsNetherlands'},
+      {data: TEAM_DATA.netherlands2026,    key: 'netherlands2026'},
     ]);
     document.getElementById('players2018-body').dataset.built = '1';
   }
@@ -2891,7 +2993,10 @@ function showScreen(name) {
 function selectMatch(key) {
   currentMatchKey = key;
 
-  if (key === '2026vsスコットランド') {
+  if (key === '2026vsオランダ') {
+    team1Data = TEAM_DATA.japan2026vsNetherlands;
+    team2Data = TEAM_DATA.netherlands2026;
+  } else if (key === '2026vsスコットランド') {
     team1Data = TEAM_DATA.japan2026;
     team2Data = TEAM_DATA.scotland2026;
   } else if (key === '2026vsイングランド') {
@@ -3350,6 +3455,7 @@ function renderFormation() {
 
 // team1DataのTEAM_DATAキーを返す
 function getTeam1DataKey() {
+  if (currentMatchKey === '2026vsオランダ') return 'japan2026vsNetherlands';
   if (currentMatchKey === '2026vsイングランド') return 'japan2026vsEngland';
   if (currentMatchKey === '2026vsスコットランド') return 'japan2026';
   return 'japan2018';
@@ -3902,10 +4008,13 @@ function selectNextArea(lastScene) {
 
 function testCounter(defTeam, area) {
   const pos = area.substring(0, 2);
+  const side = area.substring(3);
   let f = 0.05;
   if (defTeam.tactics === TACTICS_PRESS && (pos === 'DF' || pos === 'MF')) f = 0.2;
   else if (defTeam.tactics === TACTICS_COUNTER && (pos === 'FW' || pos === 'MF')) f = 0.2;
   else if (defTeam.tactics === TACTICS_CATENACCIO && pos === 'FW') f = 0.15;
+  // 前線中央(FW_M)での守備勝利はカウンター率2倍
+  if (pos === 'FW' && side === 'M') f = Math.min(f * 2, 1.0);
   return Math.random() < f;
 }
 
@@ -5991,7 +6100,7 @@ function saveParamsJSON() {
   });
 
   var out = {};
-  var keys = ['japan2026','japan2026vsEngland','england2026','scotland2026'];
+  var keys = ['japan2026','japan2026vsEngland','england2026','scotland2026','japan2026vsNetherlands','netherlands2026'];
   keys.forEach(function(k) {
     out[k] = TEAM_DATA[k].players.map(function(p) {
       return {name: p.name, long_name: p.long_name, positions: p.positions, params: p.params.slice()};
