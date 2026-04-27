@@ -1506,7 +1506,7 @@ body {
     <div class="disclaimer-box" id="disclaimer-text">
       ⚠️ 本アプリは個人制作のファン向けシミュレーターです。日本サッカー協会・各チーム・選手等とは一切関係ありません。選手パラメータは独自設定です。商業目的のコンテンツではありません。
     </div>
-    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.3.4</div>
+    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.3.5</div>
   </div>
 </div>
 
@@ -4794,11 +4794,12 @@ function buildFieldSVG(dataMap, W, H) {
     svg += '<text x="'+cx.toFixed(1)+'" y="'+(cy-3).toFixed(1)+'" text-anchor="middle" font-size="10" font-weight="700" fill="white">'+rStr+'</text>';
     svg += '<text x="'+cx.toFixed(1)+'" y="'+(cy+8).toFixed(1)+'" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.85)">'+tStr+'</text>';
   });
-  svg += '<text x="8" y="12" text-anchor="start" font-size="8" font-weight="700" fill="rgba(255,255,255,0.8)">守備</text>';
-  svg += '<text x="8" y="22" text-anchor="start" font-size="8" fill="rgba(255,255,255,0.65)">ライン</text>';
-  svg += '<text x="'+(W-8)+'" y="12" text-anchor="end" font-size="8" font-weight="700" fill="rgba(255,255,255,0.8)">前線</text>';
-  svg += '<text x="'+(W-8)+'" y="22" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.65)">ライン</text>';
-  svg += '<text x="'+W/2+'" y="'+(H-4)+'" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.5)">← 自陣　　　相手陣 →</text>';
+  var isEn = window.LANG === 'en';
+  svg += '<text x="8" y="12" text-anchor="start" font-size="8" font-weight="700" fill="rgba(255,255,255,0.8)">'+(isEn?'Def':'守備')+'</text>';
+  svg += '<text x="8" y="22" text-anchor="start" font-size="8" fill="rgba(255,255,255,0.65)">'+(isEn?'Line':'ライン')+'</text>';
+  svg += '<text x="'+(W-8)+'" y="12" text-anchor="end" font-size="8" font-weight="700" fill="rgba(255,255,255,0.8)">'+(isEn?'Att':'前線')+'</text>';
+  svg += '<text x="'+(W-8)+'" y="22" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.65)">'+(isEn?'Line':'ライン')+'</text>';
+  svg += '<text x="'+W/2+'" y="'+(H-4)+'" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.5)">'+(isEn?'← Own Half   Opp Half →':'← 自陣　　　相手陣 →')+'</text>';
   svg += '</svg>';
   return svg;
 }
@@ -4814,8 +4815,8 @@ function buildFieldWithTabs(atkMap, defMap, W, H, containerId) {
   var tabStyle = 'padding:6px 20px;font-size:12px;font-weight:700;border:none;border-radius:6px 6px 0 0;cursor:pointer;';
   var cid = containerId;
   var html = '<div style="display:flex;gap:4px;margin-bottom:0">'
-    + '<button id="'+cid+'-tab-atk" style="'+tabStyle+'background:#1a3a6b;color:white" onclick="switchFieldTab(this)">攻撃</button>'
-    + '<button id="'+cid+'-tab-def" style="'+tabStyle+'background:#eee;color:#555" onclick="switchFieldTab(this)">守備</button>'
+    + '<button id="'+cid+'-tab-atk" style="'+tabStyle+'background:#1a3a6b;color:white" onclick="switchFieldTab(this)">'+(window.LANG==='en'?'Attack':'攻撃')+'</button>'
+    + '<button id="'+cid+'-tab-def" style="'+tabStyle+'background:#eee;color:#555" onclick="switchFieldTab(this)">'+(window.LANG==='en'?'Defence':'守備')+'</button>'
     + '</div>'
     + '<div id="'+cid+'-panel-atk">' + atkSvg + legend + '</div>'
     + '<div id="'+cid+'-panel-def" style="display:none">' + defSvg + legend + '</div>';
