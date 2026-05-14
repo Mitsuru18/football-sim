@@ -7302,7 +7302,7 @@ function generateWCSummary() {
             var json = JSON.parse(data);
             if (json.type === 'content_block_delta' && json.delta && json.delta.text) {
               fullText += json.delta.text;
-              textEl.textContent = fullText;
+              textEl.innerHTML = fullText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
             }
           } catch(e) {}
         });
