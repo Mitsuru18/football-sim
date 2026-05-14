@@ -1449,7 +1449,7 @@ body {
 
 <div id="screen-title" class="screen active">
   <div class="title-content">
-    <div class="title-emblem">⚽</div>
+    <div class="title-emblem" style="display:none">⚽</div>
     <div class="title-main" id="title-main-text" style="display:none"></div>
     <div class="title-sub">Football Simulation Lab ⚽</div>
 
@@ -1458,6 +1458,8 @@ body {
       <button id="lang-btn-ja" onclick="setLang('ja')" style="padding:6px 18px;border-radius:20px;border:2px solid rgba(255,255,255,0.5);background:transparent;color:rgba(255,255,255,0.7);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🇯🇵 日本語</button>
       <button id="lang-btn-en" onclick="setLang('en')" style="padding:6px 18px;border-radius:20px;border:2px solid #fff;background:#fff;color:var(--japan-blue);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🇬🇧 English</button>
     </div>
+
+    <button onclick="showScreen('worldcup')" class="start-btn" style="width:100%;max-width:360px;margin:16px auto 8px;display:block;background:linear-gradient(135deg,#b8860b,#ffd700);color:#1a1a1a">🏆 W杯モード</button>
 
     <div class="match-list">
       <div class="match-card" onclick="selectMatch('2026vsオランダ')">
@@ -1527,6 +1529,57 @@ body {
       ⚠️ このシミュレーターは個人制作のファン向けコンテンツです。FIFA・JFA・各国サッカー協会・クラブチーム・選手本人とは一切関係ありません。選手名は識別目的のみで使用しており、実在の選手を代表・推薦・関連付けるものではありません。選手パラメータはすべて独自の創作設定であり、実際の能力・評価とは無関係です。本コンテンツは非商業的ファン活動として制作されています。
     </div>
     <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:1px">v1.6.2</div>
+  </div>
+</div>
+
+<!-- WORLDCUP SCREEN -->
+<div id="screen-worldcup" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="showScreen('title')">← 戻る</button>
+    <div class="screen-title-text">🏆 W杯グループステージ</div>
+  </div>
+  <div class="title-content" style="padding-top:16px">
+    <div style="text-align:center;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px;letter-spacing:2px">GROUP C</div>
+    <div style="width:100%;max-width:400px;margin:0 auto 24px;background:rgba(0,0,0,0.55);border-radius:12px;padding:8px 4px;backdrop-filter:blur(4px)">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;color:#fff">
+      <thead>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.55)">
+          <th style="text-align:left;padding:6px 4px">チーム</th>
+          <th style="padding:6px 8px">試</th>
+          <th style="padding:6px 8px">勝</th>
+          <th style="padding:6px 8px">分</th>
+          <th style="padding:6px 8px">敗</th>
+          <th style="padding:6px 8px">得点</th>
+          <th style="padding:6px 8px">失点</th>
+          <th style="padding:6px 8px">得失</th>
+          <th style="padding:6px 8px;color:#ffd700">勝点</th>
+        </tr>
+      </thead>
+      <tbody id="wc-group-table">
+        <tr><td style="padding:7px 4px">🇯🇵 日本</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px;color:#ffd700;font-weight:700">0</td></tr>
+        <tr><td style="padding:7px 4px">🇳🇱 オランダ</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px;color:#ffd700;font-weight:700">0</td></tr>
+        <tr><td style="padding:7px 4px">🇹🇳 チュニジア</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px;color:#ffd700;font-weight:700">0</td></tr>
+        <tr><td style="padding:7px 4px">🇸🇪 スウェーデン</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px">0</td><td style="text-align:center;padding:7px 8px;color:#ffd700;font-weight:700">0</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div id="wc-done-matches" style="max-width:400px;margin:0 auto 8px;display:none;border-radius:10px;overflow:hidden"></div>
+    <div id="wc-auto-results" style="max-width:400px;margin:0 auto 12px;display:none;padding:6px 12px;background:rgba(0,0,0,0.35);border-radius:8px;font-size:11px;color:rgba(255,255,255,0.7);text-align:center;line-height:1.8"></div>
+    <div style="max-width:360px;margin:0 auto">
+      <button id="wc-btn-next" class="start-btn" onclick="onWCNextBtn()" style="color:#ffffff">⚽ 次へ：日本 vs オランダ</button>
+    </div>
+  </div>
+</div>
+
+<!-- WORLDCUP RESULT SCREEN -->
+<div id="screen-worldcup-result" class="screen" style="background:linear-gradient(160deg,#003087 0%,#0050cc 50%,#1a7a3a 100%);align-items:center;justify-content:flex-start;overflow-y:auto">
+  <div class="screen-header" style="background:rgba(0,0,0,0.3);width:100%">
+    <div class="screen-title-text" style="color:#ffffff">🏆 グループC 最終結果</div>
+  </div>
+  <div id="wc-result-content" style="width:100%;max-width:500px;padding:0 16px 8px;box-sizing:border-box"></div>
+  <div style="width:100%;max-width:360px;padding:0 16px 32px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px">
+    <button class="start-btn" onclick="resetWCMode()" style="color:#ffffff">🔄 もう一度グループステージ</button>
+    <button class="start-btn" onclick="showScreen('title')" style="background:rgba(255,255,255,0.15);color:#ffffff">🏠 タイトルへ</button>
   </div>
 </div>
 
@@ -1731,8 +1784,9 @@ body {
     </div>
 
     <div class="result-btns">
-      <button class="retry-btn" onclick="retryGame()">🔄 もう一度</button>
-      <button class="home-btn" onclick="showScreen('title')">🏠 トップへ</button>
+      <button id="btn-retry" class="retry-btn" onclick="retryGame()">🔄 もう一度</button>
+      <button id="btn-home" class="home-btn" onclick="showScreen('title')">🏠 トップへ</button>
+      <button id="wc-result-back-btn" class="home-btn" style="display:none;background:linear-gradient(135deg,#003087,#0050cc);color:#ffffff" onclick="backToWCScreen()">🏆 グループへ</button>
     </div>
 
     <!-- シェアボタン群 -->
@@ -2859,7 +2913,7 @@ function getScenarioData() {
   },
   tunisia2026: {
     name:"チュニジア",en_name:"Tunisia",team_color:"#CC0000",flag:"🇹🇳",
-    default_system:"4-2-3-1", default_tactics:1, default_keyplayer:7, default_marked_player:3,
+    default_system:"4-2-3-1", default_tactics:TACTICS_COUNTER, default_keyplayer:7, default_marked_player:3,
     default_lineup:[11,13,2,3,4,5,16,6,9,17,8,11],
     players:[
       {name:"ダメン",en_name:"Dahmen",long_name:"アイメン・ダメン",positions:["GK"],params:[74,72,70,68,82,76,70,50,51,62,64,50,50,50,50,60,52,40,60,60,40,68,45,82,80,60,74,78,75]},
@@ -2887,7 +2941,7 @@ function getScenarioData() {
   },
   sweden2026: {
     name:"スウェーデン",en_name:"Sweden",team_color:"#006AA7",flag:"🇸🇪",
-    default_system:"3-4-2-1", default_tactics:0, default_keyplayer:10, default_marked_player:3,
+    default_system:"3-4-2-1", default_tactics:TACTICS_COUNTER, default_keyplayer:10, default_marked_player:3,
     default_lineup:[0,1,2,3,4,5,6,7,8,9,10,10],
     players:[
       {name:"ヨハンソン",en_name:"Johansson",long_name:"ヴィクトル・ヨハンソン",positions:["GK"],params:[74,72,72,70,84,78,70,50,51,64,66,50,50,50,50,60,52,40,62,62,40,70,45,84,82,60,78,78,75]},
@@ -2948,7 +3002,7 @@ function getScenarioData() {
   },
   tunisia2026: {
     name:"チュニジア",en_name:"Tunisia",team_color:"#CC0000",flag:"🇹🇳",
-    default_system:"4-2-3-1", default_tactics:1, default_keyplayer:7, default_marked_player:3,
+    default_system:"4-2-3-1", default_tactics:TACTICS_COUNTER, default_keyplayer:7, default_marked_player:3,
     default_lineup:[11,13,2,3,4,5,16,6,9,17,8,11],
     players:[
       {name:"ダメン",en_name:"Dahmen",long_name:"アイメン・ダメン",positions:["GK"],params:[74,72,70,68,82,76,70,50,51,62,64,50,50,50,50,60,52,40,60,60,40,68,45,82,80,60,74,78,75]},
@@ -2976,7 +3030,7 @@ function getScenarioData() {
   },
   sweden2026: {
     name:"スウェーデン",en_name:"Sweden",team_color:"#006AA7",flag:"🇸🇪",
-    default_system:"3-4-2-1", default_tactics:0, default_keyplayer:10, default_marked_player:3,
+    default_system:"3-4-2-1", default_tactics:TACTICS_COUNTER, default_keyplayer:10, default_marked_player:3,
     default_lineup:[0,1,2,3,4,5,6,7,8,9,10,10],
     players:[
       {name:"ヨハンソン",en_name:"Johansson",long_name:"ヴィクトル・ヨハンソン",positions:["GK"],params:[74,72,72,70,84,78,70,50,51,64,66,50,50,50,50,60,52,40,62,62,40,70,45,84,82,60,78,78,75]},
@@ -3004,7 +3058,7 @@ function getScenarioData() {
   },
   tunisia2026: {
     name:"チュニジア",en_name:"Tunisia",team_color:"#CC0000",flag:"🇹🇳",
-    default_system:"4-2-3-1", default_tactics:1, default_keyplayer:7, default_marked_player:3,
+    default_system:"4-2-3-1", default_tactics:TACTICS_COUNTER, default_keyplayer:7, default_marked_player:3,
     default_lineup:[11,13,2,3,4,5,16,6,9,17,8,11],
     players:[
       {name:"ダメン",en_name:"Dahmen",long_name:"アイメン・ダメン",positions:["GK"],params:[74,72,70,68,82,76,70,50,51,62,64,50,50,50,50,60,52,40,60,60,40,68,45,82,80,60,74,78,75]},
@@ -3032,7 +3086,7 @@ function getScenarioData() {
   },
   sweden2026: {
     name:"スウェーデン",en_name:"Sweden",team_color:"#006AA7",flag:"🇸🇪",
-    default_system:"3-4-2-1", default_tactics:0, default_keyplayer:10, default_marked_player:3,
+    default_system:"3-4-2-1", default_tactics:TACTICS_COUNTER, default_keyplayer:10, default_marked_player:3,
     default_lineup:[0,1,2,3,4,5,6,7,8,9,10,10],
     players:[
       {name:"ヨハンソン",en_name:"Johansson",long_name:"ヴィクトル・ヨハンソン",positions:["GK"],params:[74,72,72,70,84,78,70,50,51,64,66,50,50,50,50,60,52,40,62,62,40,70,45,84,82,60,78,78,75]},
@@ -3060,7 +3114,7 @@ function getScenarioData() {
   },
   netherlands2026: {
     name:"オランダ",en_name:"Netherlands",team_color:"#FF6600",flag:"🇳🇱",
-    default_system:"4-1-2-3", default_tactics:1, default_keyplayer:8, default_marked_player:1,
+    default_system:"4-1-2-3", default_tactics:TACTICS_POSSESSION, default_keyplayer:8, default_marked_player:1,
     default_lineup:[0,4,1,2,3,5,7,6,8,9,10,11],
     players:[
       {name:"フェルブルッヘン",en_name:"Flekken",long_name:"バルト・フェルブルッヘン",positions:["GK"],params:[78,74,74,72,83,74,72,50,51,64,68,50,50,50,50,60,52,40,62,62,40,72,45,83,84,62,80,80,75]},
@@ -3094,6 +3148,21 @@ function getScenarioData() {
 
 let currentMatchKey = null;
 let team1Data = null, team2Data = null;
+let isWorldCupMode = false;
+let wcMatchIndex = 0; // 日本の試合済み数 (0〜3)
+let wcStandings = {
+  '日本':        {flag:'🇯🇵', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},
+  'オランダ':    {flag:'🇳🇱', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},
+  'チュニジア':  {flag:'🇹🇳', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},
+  'スウェーデン':{flag:'🇸🇪', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}
+};
+let wcMatchScores  = []; // 日本戦スコア履歴
+let wcAutoScores   = []; // 自動演算スコア履歴
+let wcPlayerStats  = {}; // 日本選手累積スタッツ {name:{goals,duels,duelWins}}
+let wcTotalStats   = {chances:0, shots:0, gkSaves:0, oppChances:0, oppShots:0, oppGkSaves:0}; // 3試合合計スタッツ
+let wcGoalScorers  = []; // 全得点者 [{time, name, matchNum}]
+let wcAreaAtk      = {}; // エリア別攻撃勝率（累積）
+let wcAreaDef      = {}; // エリア別守備勝率（累積）
 let team1State = {}, team2State = {};
 let gameState = null;
 let chanceResults = [];
@@ -3340,6 +3409,7 @@ function buildPlayersTable(containerId, teams) {
 }
 
 function showScreen(name) {
+  if (name === 'title') isWorldCupMode = false;
   if (name === 'title' || name === 'setting') _resetSummary();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
@@ -3396,15 +3466,17 @@ function initSettingScreen() {
   document.getElementById('setting-title-text').textContent =
     `${getTeamName(team1Data)} vs ${getTeamName(team2Data)}`;
 
-  // Init state
-  team1State = {
-    systemIdx: system_data.findIndex(s => s.name === team1Data.default_system),
-    tactics: team1Data.default_tactics,
-    keyplayer: team1Data.default_keyplayer,
-    marked_player: -1,
-    lineup: [...team1Data.default_lineup.slice(0, 11)]
-  };
-  if (team1State.systemIdx < 0) team1State.systemIdx = 0;
+  // Init state（W杯モード第2戦以降は前試合の設定を引き継ぐ）
+  if (!(isWorldCupMode && wcMatchIndex > 0)) {
+    team1State = {
+      systemIdx: system_data.findIndex(s => s.name === team1Data.default_system),
+      tactics: team1Data.default_tactics,
+      keyplayer: team1Data.default_keyplayer,
+      marked_player: -1,
+      lineup: [...team1Data.default_lineup.slice(0, 11)]
+    };
+    if (team1State.systemIdx < 0) team1State.systemIdx = 0;
+  }
 
   // フィールド・ベンチ描画
   renderFormation();
@@ -3413,6 +3485,11 @@ function initSettingScreen() {
   updateSettingBtnValues();
   // 言語ラベル更新
   applyLang();
+
+  // W杯モード時は多試合ボタンを非表示
+  const multiVisible = !isWorldCupMode;
+  document.getElementById('btn-multi').style.display    = multiVisible ? '' : 'none';
+  document.getElementById('btn-multi100').style.display = multiVisible ? '' : 'none';
 }
 
 function updateSettingBtnValues() {
@@ -6676,7 +6753,628 @@ function showResult() {
   // 結果画像をセット
   const _lastR = chanceResults[chanceResults.length - 1];
   setResultImage(_lastR.t1score, _lastR.t2score);
+
+  const normalVisible = !isWorldCupMode;
+  document.getElementById('btn-retry').style.display = normalVisible ? '' : 'none';
+  document.getElementById('btn-home').style.display  = normalVisible ? '' : 'none';
+
+  if (isWorldCupMode) updateWCAfterResult();
 }
+
+// ============================================================
+// W杯グループステージ ロジック
+// ============================================================
+
+function startWCMatch(idx) {
+  isWorldCupMode = true;
+  const keys = ['2026vsオランダ', '2026vsチュニジア', '2026vsスウェーデン'];
+  selectMatch(keys[idx]);
+}
+
+// サイレントシミュレーション（UIなしで1試合演算）
+function simulateSilent(t1data, t2data) {
+  const buildState = (data) => {
+    const sysIdx = system_data.findIndex(s => s.name === data.default_system);
+    return {
+      systemIdx: sysIdx >= 0 ? sysIdx : 0,
+      tactics: data.default_tactics,
+      keyplayer: data.default_keyplayer,
+      marked_player: data.default_marked_player !== undefined ? data.default_marked_player : -1,
+      lineup: [...data.default_lineup.slice(0, 11)]
+    };
+  };
+  const t1 = buildTeam(t1data, buildState(t1data));
+  const t2 = buildTeam(t2data, buildState(t2data));
+  [t1, t2].forEach(t => {
+    t.score = 0; t.chanceCounter = 0; t.shootCounter = 0; t.gkSaveCounter = 0;
+    t.players.forEach(p => { p.chance_counter = 0; p.fatigue = 0; });
+  });
+  const gs = { team1: t1, team2: t2 };
+  const silentResults = [];
+  for (let i = 0; i < 12; i++) silentResults.push(simulateChance(gs, i));
+  if (Math.random() < 0.5) silentResults.push(simulateChance(gs, 12));
+
+  // 詳細データ集計（t1視点）
+  const silentGoalScorers = [];
+  const silentPlayerStats = {};
+  const silentAreaAtk = {};
+  const silentAreaDef = {};
+
+  silentResults.forEach(res => {
+    res.scenes.forEach(sc => {
+      const isGoal  = sc.result === 'ゴール！！';
+      const isNormal = ['成功','失敗','ファール'].includes(sc.result);
+      const isShoot  = ['ゴール！！','GK防いだ！','枠を外した！'].includes(sc.result);
+      if (!isNormal && !isShoot) return;
+
+      // t1攻撃シーン
+      if (sc.offence === t1) {
+        const p = sc.offence.players[sc.offence.lineup[sc.ofsPos]];
+        if (p) {
+          if (!silentPlayerStats[p.name]) silentPlayerStats[p.name] = {goals:0, duels:0, duelWins:0, enName:p.en_name};
+          silentPlayerStats[p.name].duels++;
+          if (isGoal || sc.result === '成功' || sc.result === 'ファール') silentPlayerStats[p.name].duelWins++;
+          if (isGoal) { silentPlayerStats[p.name].goals++; silentGoalScorers.push({time: res.time, name: p.name, teamName: t1data.name, teamFlag: t1data.flag}); }
+        }
+        const win = isShoot ? isGoal : sc.result === '成功' || sc.result === 'ファール';
+        const atkArea = (['FW_L','CR_L'].includes(sc.area)) ? 'GOAL_L'
+                      : (['FW_M','CR_M','SHOOT_M'].includes(sc.area)) ? 'GOAL_M'
+                      : (['FW_R','CR_R'].includes(sc.area)) ? 'GOAL_R' : sc.area;
+        if (!silentAreaAtk[atkArea]) silentAreaAtk[atkArea] = {win:0, lose:0};
+        win ? silentAreaAtk[atkArea].win++ : silentAreaAtk[atkArea].lose++;
+      }
+      // t2得点（全得点者一覧用）
+      if (sc.offence === t2 && isGoal) {
+        const p2 = sc.offence.players[sc.offence.lineup[sc.ofsPos]];
+        if (p2) silentGoalScorers.push({time: res.time, name: p2.name, teamName: t2data.name, teamFlag: t2data.flag});
+      }
+      // t1守備シーン
+      if (sc.defence === t1) {
+        const win = isShoot ? isGoal : sc.result === '成功' || sc.result === 'ファール';
+        const aFlip = {'DF':'FW','FW':'DF','MF':'MF','CR':'CR','SHOOT':'CR'};
+        const rawArea2 = sc.area === 'SHOOT_M' ? 'CR_M' : sc.area;
+        const pos2 = rawArea2.substring(0, rawArea2.indexOf('_'));
+        const side2 = rawArea2.substring(rawArea2.indexOf('_')+1);
+        const flipArea = (aFlip[pos2]||pos2) + '_' + (side2==='L'?'R':side2==='R'?'L':side2);
+        const defKey = (['FW_L','CR_L'].includes(flipArea)) ? 'GOAL_L'
+                     : (['FW_M','CR_M','SHOOT_M','CR_CENTER'].includes(flipArea)) ? 'GOAL_M'
+                     : (['FW_R','CR_R'].includes(flipArea)) ? 'GOAL_R' : flipArea;
+        if (!silentAreaDef[defKey]) silentAreaDef[defKey] = {win:0, lose:0};
+        win ? silentAreaDef[defKey].lose++ : silentAreaDef[defKey].win++;
+      }
+    });
+  });
+
+  return {
+    t1score: t1.score, t2score: t2.score, t1data, t2data,
+    totalStats: {
+      t1: { chances: t1.chanceCounter, shots: t1.shootCounter, gkSaves: t2.gkSaveCounter },
+      t2: { chances: t2.chanceCounter, shots: t2.shootCounter, gkSaves: t1.gkSaveCounter }
+    },
+    goalScorers: silentGoalScorers,
+    playerStats: silentPlayerStats,
+    t1areaAtk: silentAreaAtk,
+    t1areaDef: silentAreaDef
+  };
+}
+
+function applyWCResult(name, gf, ga) {
+  const s = wcStandings[name];
+  if (!s) return;
+  s.p++;
+  s.gf += gf;
+  s.ga += ga;
+  s.gd = s.gf - s.ga;
+  if (gf > ga)       { s.w++; s.pts += 3; }
+  else if (gf === ga) { s.d++; s.pts += 1; }
+  else                { s.l++; }
+}
+
+// 第N節の自動演算カード定義（日本戦インデックスに対応）
+const WC_AUTO_MATCHES = [
+  [TEAM_DATA.tunisia2026,   TEAM_DATA.sweden2026],      // 第1節後：チュニジア vs スウェーデン
+  [TEAM_DATA.netherlands2026, TEAM_DATA.sweden2026],    // 第2節後：オランダ vs スウェーデン
+  [TEAM_DATA.netherlands2026, TEAM_DATA.tunisia2026],   // 第3節後：オランダ vs チュニジア
+];
+
+function updateWCAfterResult() {
+  const t1 = parseInt(document.getElementById('result-score1').textContent);
+  const t2 = parseInt(document.getElementById('result-score2').textContent);
+  const name1 = team1Data.name;
+  const name2 = team2Data.name;
+
+  // 日本戦スコアを保存
+  wcMatchScores.push({
+    matchNum: wcMatchIndex + 1,
+    t1flag: team1Data.flag, t1name: name1, s1: t1,
+    t2flag: team2Data.flag, t2name: name2, s2: t2
+  });
+
+  // 合計スタッツ蓄積
+  if (gameState && gameState.team1) {
+    wcTotalStats.chances    += gameState.team1.chanceCounter  || 0;
+    wcTotalStats.shots      += gameState.team1.shootCounter   || 0;
+    wcTotalStats.gkSaves    += gameState.team2.gkSaveCounter  || 0;
+    wcTotalStats.oppChances += gameState.team2.chanceCounter  || 0;
+    wcTotalStats.oppShots   += gameState.team2.shootCounter   || 0;
+    wcTotalStats.oppGkSaves += gameState.team1.gkSaveCounter  || 0;
+  }
+
+  // 日本選手スタッツ・得点者・エリアマップ蓄積
+  const matchNum = wcMatchIndex + 1;
+  chanceResults.forEach(res => {
+    res.scenes.forEach(sc => {
+      const isGoal   = sc.result === 'ゴール！！';
+      const isNormal = ['成功','失敗','ファール'].includes(sc.result);
+      const isShoot  = ['ゴール！！','GK防いだ！','枠を外した！'].includes(sc.result);
+      if (!isNormal && !isShoot) return;
+
+      // 日本攻撃シーン
+      if (sc.offence.name === name1) {
+        const p = sc.offence.players[sc.offence.lineup[sc.ofsPos]];
+        if (p) {
+          if (!wcPlayerStats[p.name]) wcPlayerStats[p.name] = {goals:0, duels:0, duelWins:0, enName:p.en_name};
+          wcPlayerStats[p.name].duels++;
+          if (isGoal || sc.result === '成功' || sc.result === 'ファール') wcPlayerStats[p.name].duelWins++;
+          if (isGoal) {
+            wcPlayerStats[p.name].goals++;
+            wcGoalScorers.push({time: res.time, name: p.name, matchNum});
+          }
+        }
+        // エリア攻撃マップ
+        const win = isShoot ? isGoal : sc.result === '成功' || sc.result === 'ファール';
+        const atkArea = (['FW_L','CR_L'].includes(sc.area)) ? 'GOAL_L'
+                      : (['FW_M','CR_M','SHOOT_M'].includes(sc.area)) ? 'GOAL_M'
+                      : (['FW_R','CR_R'].includes(sc.area)) ? 'GOAL_R' : sc.area;
+        if (!wcAreaAtk[atkArea]) wcAreaAtk[atkArea] = {win:0, lose:0};
+        win ? wcAreaAtk[atkArea].win++ : wcAreaAtk[atkArea].lose++;
+      }
+
+      // 日本守備シーン（エリア守備マップ）
+      if (sc.defence.name === name1) {
+        const win = isShoot ? isGoal : sc.result === '成功' || sc.result === 'ファール';
+        const aFlip = {'DF':'FW','FW':'DF','MF':'MF','CR':'CR','SHOOT':'CR'};
+        const rawArea = sc.area === 'SHOOT_M' ? 'CR_M' : sc.area;
+        const pos2 = rawArea.substring(0, rawArea.indexOf('_'));
+        const side2 = rawArea.substring(rawArea.indexOf('_')+1);
+        const flipArea = (aFlip[pos2]||pos2) + '_' + (side2==='L'?'R':side2==='R'?'L':side2);
+        const defKey = (['FW_L','CR_L'].includes(flipArea)) ? 'GOAL_L'
+                     : (['FW_M','CR_M','SHOOT_M','CR_CENTER'].includes(flipArea)) ? 'GOAL_M'
+                     : (['FW_R','CR_R'].includes(flipArea)) ? 'GOAL_R' : flipArea;
+        if (!wcAreaDef[defKey]) wcAreaDef[defKey] = {win:0, lose:0};
+        win ? wcAreaDef[defKey].lose++ : wcAreaDef[defKey].win++;
+      }
+    });
+  });
+
+  applyWCResult(name1, t1, t2);
+  applyWCResult(name2, t2, t1);
+
+  // 自動演算（同節の他試合）
+  const autoMatch = WC_AUTO_MATCHES[wcMatchIndex];
+  const auto = simulateSilent(autoMatch[0], autoMatch[1]);
+  applyWCResult(auto.t1data.name, auto.t1score, auto.t2score);
+  applyWCResult(auto.t2data.name, auto.t2score, auto.t1score);
+
+  // 自動演算スコアを保存＆表示エリアに追記（詳細データも蓄積）
+  wcAutoScores.push({
+    t1flag: auto.t1data.flag, t1name: auto.t1data.name, t1score: auto.t1score,
+    t2flag: auto.t2data.flag, t2name: auto.t2data.name, t2score: auto.t2score,
+    totalStats: auto.totalStats,
+    goalScorers: auto.goalScorers,
+    playerStats: auto.playerStats,
+    t1areaAtk: auto.t1areaAtk,
+    t1areaDef: auto.t1areaDef
+  });
+  const el = document.getElementById('wc-auto-results');
+  if (el) {
+    const line = `${auto.t1data.flag} ${auto.t1data.name} ${auto.t1score}–${auto.t2score} ${auto.t2data.name} ${auto.t2data.flag} ※自動演算`;
+    el.innerHTML += (el.innerHTML ? '<br>' : '') + line;
+    el.style.display = '';
+  }
+
+  wcMatchIndex++;
+  renderWCTable();
+  document.getElementById('wc-result-back-btn').style.display = '';
+}
+
+function backToWCScreen() {
+  document.getElementById('wc-result-back-btn').style.display = 'none';
+
+  // 終了済み試合のスコアを記録
+  const s1 = parseInt(document.getElementById('result-score1').textContent);
+  const s2 = parseInt(document.getElementById('result-score2').textContent);
+  const el = document.getElementById('wc-done-matches');
+  if (el) {
+    const row = document.createElement('div');
+    row.style.cssText = 'padding:8px 14px;background:rgba(0,0,0,0.45);color:#ffffff;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1)';
+    row.innerHTML = `<span>🏁 第${wcMatchIndex}戦</span><span>${team1Data.flag} ${team1Data.name} ${s1}–${s2} ${team2Data.flag} ${team2Data.name}</span>`;
+    el.appendChild(row);
+    el.style.display = '';
+  }
+
+  updateWCNextBtn();
+  showScreen('worldcup');
+}
+
+function updateWCNextBtn() {
+  const btn = document.getElementById('wc-btn-next');
+  if (!btn) return;
+  const labels = [
+    '⚽ 次へ：日本 vs オランダ',
+    '⚽ 次へ：日本 vs チュニジア',
+    '⚽ 次へ：日本 vs スウェーデン',
+  ];
+  if (wcMatchIndex < 3) {
+    btn.textContent = labels[wcMatchIndex];
+    btn.onclick = () => onWCNextBtn();
+    btn.style.background = '';
+    btn.style.color = '#ffffff';
+  } else {
+    btn.textContent = '🏆 最終順位を見る';
+    btn.onclick = () => showWCResult();
+    btn.style.background = 'linear-gradient(135deg,#b8860b,#ffd700)';
+    btn.style.color = '#1a1a1a';
+  }
+}
+
+function onWCNextBtn() {
+  if (wcMatchIndex < 3) startWCMatch(wcMatchIndex);
+}
+
+function showWCResult() {
+  const names = ['日本','オランダ','チュニジア','スウェーデン'];
+  const sorted = names.slice().sort((a,b) => {
+    const sa=wcStandings[a], sb=wcStandings[b];
+    if (sb.pts!==sa.pts) return sb.pts-sa.pts;
+    if (sb.gd !==sa.gd)  return sb.gd -sa.gd;
+    return sb.gf-sa.gf;
+  });
+  const japanRank = sorted.indexOf('日本') + 1;
+  const advanced  = japanRank <= 2;
+  const rankLabel = ['1位','2位','3位','4位'][japanRank-1];
+  const medals    = ['🥇','🥈','🥉','4️⃣'];
+
+  let html = '';
+
+  // 突破/敗退
+  html += `<div style="text-align:center;padding:20px 0 16px">
+    <div style="font-size:26px;font-weight:700;color:#fff">${advanced ? '🎉 グループ突破！' : '😢 グループ敗退'}</div>
+    <div style="font-size:15px;color:${advanced?'#ffd700':'rgba(255,255,255,0.6)'};margin-top:4px">${rankLabel}通過${advanced?'':'（敗退）'}</div>
+  </div>`;
+
+  // 最終順位表
+  html += `<div style="background:rgba(0,0,0,0.45);border-radius:12px;padding:8px 4px;margin-bottom:16px">
+    <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:2px;padding:4px 0 8px">GROUP C 最終順位</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px;color:#fff">
+      <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5)">
+        <th style="padding:4px 6px">#</th><th style="text-align:left;padding:4px 4px">チーム</th>
+        <th style="padding:4px 5px">勝点</th><th style="padding:4px 5px">勝</th><th style="padding:4px 5px">分</th>
+        <th style="padding:4px 5px">敗</th><th style="padding:4px 5px">得</th><th style="padding:4px 5px">失</th><th style="padding:4px 5px">得失</th>
+      </tr></thead><tbody>`;
+  sorted.forEach((name,i) => {
+    const s=wcStandings[name];
+    const bg = name==='日本' ? 'background:rgba(255,255,255,0.12)' : '';
+    html += `<tr style="${bg}">
+      <td style="text-align:center;padding:7px 6px">${medals[i]}</td>
+      <td style="padding:7px 4px">${s.flag} ${name}</td>
+      <td style="text-align:center;padding:7px 5px;color:#ffd700;font-weight:700">${s.pts}</td>
+      <td style="text-align:center;padding:7px 5px">${s.w}</td><td style="text-align:center;padding:7px 5px">${s.d}</td>
+      <td style="text-align:center;padding:7px 5px">${s.l}</td><td style="text-align:center;padding:7px 5px">${s.gf}</td>
+      <td style="text-align:center;padding:7px 5px">${s.ga}</td><td style="text-align:center;padding:7px 5px">${s.gd}</td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>`;
+
+  // 日本戦スコア
+  if (wcMatchScores.length > 0) {
+    html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:12px">
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">🇯🇵 日本の試合結果</div>`;
+    wcMatchScores.forEach(m => {
+      html += `<div style="padding:8px 14px;color:#fff;font-size:13px;font-weight:700;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.07)">
+        <span>第${m.matchNum}戦</span><span>${m.t1flag} ${m.t1name} ${m.s1}–${m.s2} ${m.t2flag} ${m.t2name}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // 自動演算スコア
+  if (wcAutoScores.length > 0) {
+    html += `<div style="background:rgba(0,0,0,0.25);border-radius:10px;overflow:hidden;margin-bottom:16px">
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.07)">📊 自動演算結果</div>`;
+    wcAutoScores.forEach((m,i) => {
+      html += `<div style="padding:7px 14px;color:rgba(255,255,255,0.7);font-size:12px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05)">
+        <span>第${i+1}節</span><span>${m.t1flag} ${m.t1name} ${m.t1score}–${m.t2score} ${m.t2flag} ${m.t2name}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // 全チームプレイヤースタッツ集計（MVP・デュエルランキング用）
+  const allPlayerStats = {};
+  const _addToStats = (name, st, teamName, teamFlag) => {
+    if (!allPlayerStats[name]) allPlayerStats[name] = {goals:0, duels:0, duelWins:0, teamName, teamFlag};
+    allPlayerStats[name].goals    += st.goals    || 0;
+    allPlayerStats[name].duels    += st.duels    || 0;
+    allPlayerStats[name].duelWins += st.duelWins || 0;
+  };
+  Object.entries(wcPlayerStats).forEach(([n,st]) => _addToStats(n, st, '日本', '🇯🇵'));
+  wcAutoScores.forEach(m => {
+    if (m.playerStats) Object.entries(m.playerStats).forEach(([n,st]) => _addToStats(n, st, m.t1name, m.t1flag));
+  });
+
+  // MVP（全チーム対象）
+  const _allEntries = Object.entries(allPlayerStats);
+  if (_allEntries.length > 0) {
+    const [mvpName, mvpSt] = _allEntries.sort((a,b) =>
+      (b[1].goals*3 + b[1].duelWins) - (a[1].goals*3 + a[1].duelWins)
+    )[0];
+    html += `<div style="background:rgba(184,134,11,0.3);border:1px solid rgba(255,215,0,0.4);border-radius:10px;padding:14px;margin-bottom:8px;text-align:center">
+      <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;margin-bottom:6px">🏅 グループ MVP</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:4px">${mvpSt.teamFlag} ${mvpSt.teamName}</div>
+      <div style="font-size:22px;font-weight:700;color:#ffd700">${mvpName}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px">${mvpSt.goals}ゴール・デュエル勝利 ${mvpSt.duelWins}回</div>
+    </div>`;
+  }
+
+  // グループ全得点者一覧
+  const allScorers = [];
+  wcGoalScorers.forEach(g => {
+    allScorers.push({label: `第${g.matchNum}戦`, time: g.time, name: g.name, teamFlag: '🇯🇵', teamName: '日本'});
+  });
+  wcAutoScores.forEach((m, i) => {
+    if (m.goalScorers) {
+      m.goalScorers.forEach(g => {
+        allScorers.push({label: `第${i+1}節(自動)`, time: g.time, name: g.name, teamFlag: g.teamFlag || m.t1flag, teamName: g.teamName || m.t1name});
+      });
+    }
+  });
+  if (allScorers.length > 0) {
+    html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:12px">
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">⚽ グループ全得点者</div>`;
+    allScorers.forEach(g => {
+      html += `<div style="padding:7px 14px;color:#fff;font-size:13px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06)">
+        <span>${g.teamFlag} ${g.name}</span><span style="color:rgba(255,255,255,0.55);font-size:12px">${g.label} ${g.time}</span></div>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;color:rgba(255,255,255,0.45);font-size:13px;text-align:center">ノーゴール</div>`;
+  }
+
+  // デュエル勝利数ランキング（全チーム・上位5名）
+  const duelRanking = Object.entries(allPlayerStats)
+    .sort((a,b) => b[1].duelWins - a[1].duelWins)
+    .slice(0, 5);
+  if (duelRanking.length > 0) {
+    const maxWins = duelRanking[0][1].duelWins || 1;
+    html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:16px">
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">🥊 デュエル勝利数ランキング（全チーム）</div>`;
+    duelRanking.forEach(([name, st]) => {
+      const pct = Math.round(st.duelWins / maxWins * 100);
+      html += `<div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06)">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="color:#fff;font-size:13px;font-weight:700">${name} <span style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:400">${st.teamFlag} ${st.teamName}</span></span>
+          <span style="color:rgba(255,255,255,0.6);font-size:12px">${st.duelWins}勝 / ${st.duels}回</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:4px;height:6px">
+          <div style="width:${pct}%;height:100%;background:#4a9eff;border-radius:4px"></div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // AI総括
+  html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:16px">
+    <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between">
+      <span>🤖 AI総括</span>
+      <button id="wc-summary-btn" onclick="generateWCSummary()" style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;font-family:inherit;font-weight:700">✨ AI総括を生成</button>
+    </div>
+    <div id="wc-summary-content" style="padding:12px;font-size:13px;line-height:1.9;color:rgba(255,255,255,0.85)">
+      <span style="color:rgba(255,255,255,0.35);font-size:12px">「✨ AI総括を生成」ボタンを押すと、AIがグループCを総括します</span>
+    </div>
+  </div>`;
+
+  document.getElementById('wc-result-content').innerHTML = html;
+
+  showScreen('worldcup-result');
+}
+
+// ===== W杯グループステージ AI総括 =====
+function generateWCSummary() {
+  var btn = document.getElementById('wc-summary-btn');
+  var el  = document.getElementById('wc-summary-content');
+  btn.disabled = true;
+  btn.textContent = '⏳ 生成中...';
+  btn.style.opacity = '0.6';
+  el.innerHTML = '<span style="color:rgba(255,255,255,0.4);font-size:12px">✨ 生成中...</span>';
+
+  // 最終順位テキスト
+  var names = ['日本','オランダ','チュニジア','スウェーデン'];
+  var sorted = names.slice().sort(function(a,b) {
+    var sa = wcStandings[a], sb = wcStandings[b];
+    if (sb.pts !== sa.pts) return sb.pts - sa.pts;
+    if (sb.gd  !== sa.gd)  return sb.gd  - sa.gd;
+    return sb.gf - sa.gf;
+  });
+  var standingsText = sorted.map(function(n, i) {
+    var s = wcStandings[n];
+    return (i+1) + '位 ' + n + '(' + s.pts + 'pt ' + s.w + '勝' + s.d + '分' + s.l + '敗 ' + s.gf + '得' + s.ga + '失)';
+  }).join(' / ');
+
+  // 日本戦スコア
+  var japanScoresText = wcMatchScores.map(function(m) {
+    return m.t1name + ' ' + m.s1 + '-' + m.s2 + ' ' + m.t2name;
+  }).join(' / ');
+
+  // 自動演算スコア
+  var autoScoresText = wcAutoScores.map(function(m) {
+    return m.t1name + ' ' + m.t1score + '-' + m.t2score + ' ' + m.t2name;
+  }).join(' / ');
+
+  // 日本結果
+  var japanRank = sorted.indexOf('日本') + 1;
+  var japanResult = japanRank <= 2 ? japanRank + '位通過' : japanRank + '位（敗退）';
+
+  // MVP再計算（全チーム）
+  var apStats = {};
+  var _addP = function(n, st, tName) {
+    if (!apStats[n]) apStats[n] = {goals:0, duelWins:0, teamName:tName};
+    apStats[n].goals    += st.goals    || 0;
+    apStats[n].duelWins += st.duelWins || 0;
+  };
+  Object.entries(wcPlayerStats).forEach(function(kv) { _addP(kv[0], kv[1], '日本'); });
+  wcAutoScores.forEach(function(m) {
+    if (m.playerStats) Object.entries(m.playerStats).forEach(function(kv) { _addP(kv[0], kv[1], m.t1name); });
+  });
+  var mvpEntry = Object.entries(apStats).sort(function(a,b) {
+    return (b[1].goals*3 + b[1].duelWins) - (a[1].goals*3 + a[1].duelWins);
+  })[0];
+  var mvpText = mvpEntry ? mvpEntry[0] + '(' + mvpEntry[1].teamName + ' ' + mvpEntry[1].goals + 'ゴール/デュエル勝利' + mvpEntry[1].duelWins + '回)' : '-';
+
+  // 全得点者テキスト
+  var scorerLines = [];
+  wcGoalScorers.forEach(function(g) { scorerLines.push('🇯🇵' + g.name + '(' + g.time + ')'); });
+  wcAutoScores.forEach(function(m) {
+    if (m.goalScorers) m.goalScorers.forEach(function(g) {
+      scorerLines.push((g.teamFlag||'') + g.name + '(' + g.time + ')');
+    });
+  });
+  var allScorersText = scorerLines.join(', ') || 'なし';
+
+  var matchData = {
+    isWorldCup:  true,
+    standings:   standingsText,
+    japanResult: japanResult,
+    japanScores: japanScoresText,
+    autoScores:  autoScoresText,
+    allScorers:  allScorersText,
+    mvp:         mvpText,
+    // 既存Workerフィールドへのフォールバック
+    team1:   '日本',
+    team2:   'グループC',
+    score1:  wcStandings['日本'] ? wcStandings['日本'].gf : 0,
+    score2:  wcStandings['日本'] ? wcStandings['日本'].ga : 0,
+    goals:   allScorersText,
+    mvp1:    mvpEntry ? mvpEntry[0] : '-',
+    mvp2:    '-',
+    topPattern: '',
+  };
+
+  var WORKER_URL = 'https://footballsimulator.m-iwasaki18.workers.dev';
+
+  fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ matchData: matchData, lang: 'ja' }),
+  }).then(function(res) {
+    if (res.status === 429) {
+      el.innerHTML = '<span style="color:#e67e00;font-size:12px;line-height:1.7">⏳ AI総括の生成上限（1時間あたり3回）に達しました。1時間後にお試しください。</span>';
+      btn.textContent = '⏳ 上限に達しました';
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+      return;
+    }
+    if (!res.ok) {
+      return res.text().then(function(body) { throw new Error('HTTP ' + res.status + ': ' + body); });
+    }
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var buffer = '';
+    var fullText = '';
+    el.innerHTML = '<div style="line-height:1.9;font-size:13px;color:rgba(255,255,255,0.85)"></div>';
+    var textEl = el.querySelector('div');
+
+    function read() {
+      reader.read().then(function(chunk) {
+        if (chunk.done) {
+          btn.textContent = '✅ 生成済み';
+          btn.disabled = true;
+          btn.style.opacity = '0.6';
+          return;
+        }
+        buffer += decoder.decode(chunk.value, { stream: true });
+        var lines = buffer.split('\n');
+        buffer = lines.pop();
+        lines.forEach(function(line) {
+          if (!line.startsWith('data: ')) return;
+          var data = line.slice(6).trim();
+          if (data === '[DONE]') return;
+          try {
+            var json = JSON.parse(data);
+            if (json.type === 'content_block_delta' && json.delta && json.delta.text) {
+              fullText += json.delta.text;
+              textEl.textContent = fullText;
+            }
+          } catch(e) {}
+        });
+        read();
+      }).catch(function(err) {
+        el.innerHTML = '<span style="color:#ff6b6b;font-size:11px">Stream error: ' + err.message + '</span>';
+        btn.textContent = '🔄 再試行';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      });
+    }
+    read();
+  }).catch(function(err) {
+    if (err.message && err.message.indexOf('429') !== -1) {
+      el.innerHTML = '<span style="color:#e67e00;font-size:12px;line-height:1.7">⏳ AI総括の生成上限に達しました。1時間後にお試しください。</span>';
+      btn.textContent = '⏳ 上限に達しました';
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+    } else {
+      el.innerHTML = '<span style="color:#ff6b6b;font-size:11px">接続エラー: ' + err.message + '</span>';
+      btn.textContent = '🔄 再試行';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  });
+}
+
+function resetWCMode() {
+  wcMatchIndex  = 0;
+  wcMatchScores = [];
+  wcAutoScores  = [];
+  wcPlayerStats = {};
+  wcTotalStats  = {chances:0, shots:0, gkSaves:0, oppChances:0, oppShots:0, oppGkSaves:0};
+  wcGoalScorers = [];
+  wcAreaAtk     = {};
+  wcAreaDef     = {};
+  wcStandings = {
+    '日本':        {flag:'🇯🇵', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},
+    'オランダ':    {flag:'🇳🇱', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},
+    'チュニジア':  {flag:'🇹🇳', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},
+    'スウェーデン':{flag:'🇸🇪', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}
+  };
+  const doneEl = document.getElementById('wc-done-matches');
+  if (doneEl) { doneEl.innerHTML=''; doneEl.style.display='none'; }
+  const autoEl = document.getElementById('wc-auto-results');
+  if (autoEl) { autoEl.innerHTML=''; autoEl.style.display='none'; }
+  renderWCTable();
+  updateWCNextBtn();
+  showScreen('worldcup');
+}
+
+function renderWCTable() {
+  const names = ['日本', 'オランダ', 'チュニジア', 'スウェーデン'];
+  const sorted = names.slice().sort((a, b) => {
+    const sa = wcStandings[a], sb = wcStandings[b];
+    if (sb.pts !== sa.pts) return sb.pts - sa.pts;
+    if (sb.gd  !== sa.gd)  return sb.gd  - sa.gd;
+    return sb.gf - sa.gf;
+  });
+  const tbody = document.getElementById('wc-group-table');
+  if (!tbody) return;
+  tbody.innerHTML = sorted.map(name => {
+    const s = wcStandings[name];
+    const td = (v, ex) => `<td style="text-align:center;padding:7px 8px${ex||''}">${v}</td>`;
+    return `<tr>
+      <td style="padding:7px 4px">${s.flag} ${name}</td>
+      ${td(s.p)}${td(s.w)}${td(s.d)}${td(s.l)}${td(s.gf)}${td(s.ga)}${td(s.gd)}
+      ${td(s.pts, ';color:#ffd700;font-weight:700')}
+    </tr>`;
+  }).join('');
+}
+
 
 function retryGame() {
   _resetSummary();
