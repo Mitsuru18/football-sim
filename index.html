@@ -7108,7 +7108,7 @@ function updateWCAfterResult() {
   });
   const el = document.getElementById('wc-auto-results');
   if (el) {
-    const line = `${auto.t1data.flag} ${auto.t1data.name} ${auto.t1score}–${auto.t2score} ${auto.t2data.name} ${auto.t2data.flag} ${t('wcAutoSimulated')}`;
+    const line = `${auto.t1data.flag} ${getTeamName(auto.t1data)} ${auto.t1score}–${auto.t2score} ${getTeamName(auto.t2data)} ${auto.t2data.flag} ${t('wcAutoSimulated')}`;
     el.innerHTML += (el.innerHTML ? '<br>' : '') + line;
     el.style.display = '';
   }
