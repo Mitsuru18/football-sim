@@ -3159,6 +3159,7 @@ let wcStandings = {
 let wcMatchScores  = []; // 日本戦スコア履歴
 let wcAutoScores   = []; // 自動演算スコア履歴
 let wcPlayerStats  = {}; // 日本選手累積スタッツ {name:{goals,duels,duelWins}}
+let wcOppPlayerStats = {}; // 対戦相手選手累積スタッツ（日本戦3試合分）{name:{goals,duels,duelWins,teamName,teamFlag}}
 let wcTotalStats   = {chances:0, shots:0, gkSaves:0, oppChances:0, oppShots:0, oppGkSaves:0}; // 3試合合計スタッツ
 let wcGoalScorers  = []; // 全得点者 [{time, name, matchNum}]
 let wcAreaAtk      = {}; // エリア別攻撃勝率（累積）
@@ -6794,9 +6795,10 @@ function simulateSilent(t1data, t2data) {
   for (let i = 0; i < 12; i++) silentResults.push(simulateChance(gs, i));
   if (Math.random() < 0.5) silentResults.push(simulateChance(gs, 12));
 
-  // 詳細データ集計（t1視点）
+  // 詳細データ集計（t1・t2視点）
   const silentGoalScorers = [];
   const silentPlayerStats = {};
+  const silentT2PlayerStats = {};
   const silentAreaAtk = {};
   const silentAreaDef = {};
 
@@ -6823,10 +6825,15 @@ function simulateSilent(t1data, t2data) {
         if (!silentAreaAtk[atkArea]) silentAreaAtk[atkArea] = {win:0, lose:0};
         win ? silentAreaAtk[atkArea].win++ : silentAreaAtk[atkArea].lose++;
       }
-      // t2得点（全得点者一覧用）
-      if (sc.offence === t2 && isGoal) {
+      // t2攻撃シーン
+      if (sc.offence === t2) {
         const p2 = sc.offence.players[sc.offence.lineup[sc.ofsPos]];
-        if (p2) silentGoalScorers.push({time: res.time, name: p2.name, teamName: t2data.name, teamFlag: t2data.flag});
+        if (p2) {
+          if (!silentT2PlayerStats[p2.name]) silentT2PlayerStats[p2.name] = {goals:0, duels:0, duelWins:0, enName:p2.en_name};
+          silentT2PlayerStats[p2.name].duels++;
+          if (isGoal || sc.result === '成功' || sc.result === 'ファール') silentT2PlayerStats[p2.name].duelWins++;
+          if (isGoal) { silentT2PlayerStats[p2.name].goals++; silentGoalScorers.push({time: res.time, name: p2.name, teamName: t2data.name, teamFlag: t2data.flag}); }
+        }
       }
       // t1守備シーン
       if (sc.defence === t1) {
@@ -6853,6 +6860,7 @@ function simulateSilent(t1data, t2data) {
     },
     goalScorers: silentGoalScorers,
     playerStats: silentPlayerStats,
+    t2playerStats: silentT2PlayerStats,
     t1areaAtk: silentAreaAtk,
     t1areaDef: silentAreaDef
   };
@@ -6930,6 +6938,17 @@ function updateWCAfterResult() {
         win ? wcAreaAtk[atkArea].win++ : wcAreaAtk[atkArea].lose++;
       }
 
+      // 対戦相手攻撃シーン（デュエル集計）
+      if (sc.offence.name === name2) {
+        const p = sc.offence.players[sc.offence.lineup[sc.ofsPos]];
+        if (p) {
+          if (!wcOppPlayerStats[p.name]) wcOppPlayerStats[p.name] = {goals:0, duels:0, duelWins:0, enName:p.en_name, teamName: name2, teamFlag: team2Data.flag};
+          wcOppPlayerStats[p.name].duels++;
+          if (isGoal || sc.result === '成功' || sc.result === 'ファール') wcOppPlayerStats[p.name].duelWins++;
+          if (isGoal) wcOppPlayerStats[p.name].goals++;
+        }
+      }
+
       // 日本守備シーン（エリア守備マップ）
       if (sc.defence.name === name1) {
         const win = isShoot ? isGoal : sc.result === '成功' || sc.result === 'ファール';
@@ -6963,6 +6982,7 @@ function updateWCAfterResult() {
     totalStats: auto.totalStats,
     goalScorers: auto.goalScorers,
     playerStats: auto.playerStats,
+    t2playerStats: auto.t2playerStats,
     t1areaAtk: auto.t1areaAtk,
     t1areaDef: auto.t1areaDef
   });
@@ -7097,8 +7117,10 @@ function showWCResult() {
     allPlayerStats[name].duelWins += st.duelWins || 0;
   };
   Object.entries(wcPlayerStats).forEach(([n,st]) => _addToStats(n, st, '日本', '🇯🇵'));
+  Object.entries(wcOppPlayerStats).forEach(([n,st]) => _addToStats(n, st, st.teamName, st.teamFlag));
   wcAutoScores.forEach(m => {
-    if (m.playerStats) Object.entries(m.playerStats).forEach(([n,st]) => _addToStats(n, st, m.t1name, m.t1flag));
+    if (m.playerStats)   Object.entries(m.playerStats).forEach(([n,st])   => _addToStats(n, st, m.t1name, m.t1flag));
+    if (m.t2playerStats) Object.entries(m.t2playerStats).forEach(([n,st]) => _addToStats(n, st, m.t2name, m.t2flag));
   });
 
   // MVP（全チーム対象）
@@ -7127,32 +7149,41 @@ function showWCResult() {
       });
     }
   });
-  if (allScorers.length > 0) {
+  // 得点者を選手単位に集約
+  const scorerMap = {};
+  allScorers.forEach(g => {
+    const key = g.name;
+    if (!scorerMap[key]) scorerMap[key] = {name: g.name, teamFlag: g.teamFlag, goals: 0};
+    scorerMap[key].goals++;
+  });
+  const scorerList = Object.values(scorerMap).sort((a,b) => b.goals - a.goals);
+  if (scorerList.length > 0) {
     html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:12px">
       <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">⚽ グループ全得点者</div>`;
-    allScorers.forEach(g => {
+    scorerList.forEach(g => {
       html += `<div style="padding:7px 14px;color:#fff;font-size:13px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06)">
-        <span>${g.teamFlag} ${g.name}</span><span style="color:rgba(255,255,255,0.55);font-size:12px">${g.label} ${g.time}</span></div>`;
+        <span>${g.name} ${g.teamFlag}</span><span style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:700">${g.goals}得点</span></div>`;
     });
     html += `</div>`;
   } else {
     html += `<div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;color:rgba(255,255,255,0.45);font-size:13px;text-align:center">ノーゴール</div>`;
   }
 
-  // デュエル勝利数ランキング（全チーム・上位5名）
+  // デュエル勝率ランキング（全チーム・上位5名、3回未満除外）
   const duelRanking = Object.entries(allPlayerStats)
-    .sort((a,b) => b[1].duelWins - a[1].duelWins)
+    .filter(([,st]) => st.duels >= 3)
+    .map(([name, st]) => [name, st, st.duels > 0 ? st.duelWins / st.duels : 0])
+    .sort((a,b) => b[2] - a[2])
     .slice(0, 5);
   if (duelRanking.length > 0) {
-    const maxWins = duelRanking[0][1].duelWins || 1;
     html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:16px">
-      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">🥊 デュエル勝利数ランキング（全チーム）</div>`;
-    duelRanking.forEach(([name, st]) => {
-      const pct = Math.round(st.duelWins / maxWins * 100);
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">🥊 デュエル勝率ランキング（全チーム）</div>`;
+    duelRanking.forEach(([name, st, rate]) => {
+      const pct = Math.round(rate * 100);
       html += `<div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06)">
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span style="color:#fff;font-size:13px;font-weight:700">${name} <span style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:400">${st.teamFlag} ${st.teamName}</span></span>
-          <span style="color:rgba(255,255,255,0.6);font-size:12px">${st.duelWins}勝 / ${st.duels}回</span>
+          <span style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:700">勝率${pct}%</span>
         </div>
         <div style="background:rgba(255,255,255,0.15);border-radius:4px;height:6px">
           <div style="width:${pct}%;height:100%;background:#4a9eff;border-radius:4px"></div>
@@ -7334,7 +7365,8 @@ function resetWCMode() {
   wcMatchIndex  = 0;
   wcMatchScores = [];
   wcAutoScores  = [];
-  wcPlayerStats = {};
+  wcPlayerStats    = {};
+  wcOppPlayerStats = {};
   wcTotalStats  = {chances:0, shots:0, gkSaves:0, oppChances:0, oppShots:0, oppGkSaves:0};
   wcGoalScorers = [];
   wcAreaAtk     = {};
