@@ -7129,7 +7129,7 @@ function backToWCScreen() {
     const row = document.createElement('div');
     row.style.cssText = 'padding:8px 14px;background:rgba(0,0,0,0.45);color:#ffffff;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1)';
     const doneMatchLbl = window.LANG === 'en' ? `Match ${wcMatchIndex}` : `第${wcMatchIndex}戦`;
-    row.innerHTML = `<span>🏁 ${doneMatchLbl}</span><span>${team1Data.flag} ${team1Data.name} ${s1}–${s2} ${team2Data.flag} ${team2Data.name}</span>`;
+    row.innerHTML = `<span>🏁 ${doneMatchLbl}</span><span>${team1Data.flag} ${getTeamName(team1Data)} ${s1}–${s2} ${team2Data.flag} ${getTeamName(team2Data)}</span>`;
     el.appendChild(row);
     el.style.display = '';
   }
@@ -7210,7 +7210,7 @@ function showWCResult() {
     wcMatchScores.forEach(m => {
       const matchLbl = window.LANG === 'en' ? `Match ${m.matchNum}` : `第${m.matchNum}戦`;
       html += `<div style="padding:8px 14px;color:#fff;font-size:13px;font-weight:700;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.07)">
-        <span>${matchLbl}</span><span>${m.t1flag} ${m.t1name} ${m.s1}–${m.s2} ${m.t2flag} ${m.t2name}</span></div>`;
+        <span>${matchLbl}</span><span>${m.t1flag} ${getWCTeamName(m.t1name)} ${m.s1}–${m.s2} ${m.t2flag} ${getWCTeamName(m.t2name)}</span></div>`;
     });
     html += `</div>`;
   }
@@ -7222,7 +7222,7 @@ function showWCResult() {
     wcAutoScores.forEach((m,i) => {
       const roundLbl = window.LANG === 'en' ? `Round ${i+1}` : `第${i+1}節`;
       html += `<div style="padding:7px 14px;color:rgba(255,255,255,0.7);font-size:12px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05)">
-        <span>${roundLbl}</span><span>${m.t1flag} ${m.t1name} ${m.t1score}–${m.t2score} ${m.t2flag} ${m.t2name}</span></div>`;
+        <span>${roundLbl}</span><span>${m.t1flag} ${getWCTeamName(m.t1name)} ${m.t1score}–${m.t2score} ${m.t2flag} ${getWCTeamName(m.t2name)}</span></div>`;
     });
     html += `</div>`;
   }
