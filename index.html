@@ -1590,23 +1590,23 @@ body {
 <div id="screen-worldcup" class="screen">
   <div class="screen-header">
     <button class="back-btn" onclick="showScreen('title')">← 戻る</button>
-    <div class="screen-title-text">🏆 W杯グループステージ</div>
+    <div class="screen-title-text" id="wc-screen-title">🏆 W杯グループステージ</div>
   </div>
   <div class="title-content" style="padding-top:16px">
-    <div style="text-align:center;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px;letter-spacing:2px">GROUP C</div>
+    <div id="wc-group-label" style="text-align:center;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px;letter-spacing:2px">GROUP C</div>
     <div style="width:100%;max-width:400px;margin:0 auto 24px;background:rgba(0,0,0,0.55);border-radius:12px;padding:8px 4px;backdrop-filter:blur(4px)">
     <table style="width:100%;border-collapse:collapse;font-size:13px;color:#fff">
       <thead>
         <tr style="border-bottom:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.55)">
-          <th style="text-align:left;padding:6px 4px">チーム</th>
-          <th style="padding:6px 8px">試</th>
-          <th style="padding:6px 8px">勝</th>
-          <th style="padding:6px 8px">分</th>
-          <th style="padding:6px 8px">敗</th>
-          <th style="padding:6px 8px">得点</th>
-          <th style="padding:6px 8px">失点</th>
-          <th style="padding:6px 8px">得失</th>
-          <th style="padding:6px 8px;color:#ffd700">勝点</th>
+          <th id="wc-th-team" style="text-align:left;padding:6px 4px">チーム</th>
+          <th id="wc-th-mp" style="padding:6px 8px">試</th>
+          <th id="wc-th-w" style="padding:6px 8px">勝</th>
+          <th id="wc-th-d" style="padding:6px 8px">分</th>
+          <th id="wc-th-l" style="padding:6px 8px">敗</th>
+          <th id="wc-th-gf" style="padding:6px 8px">得点</th>
+          <th id="wc-th-ga" style="padding:6px 8px">失点</th>
+          <th id="wc-th-gd" style="padding:6px 8px">得失</th>
+          <th id="wc-th-pts" style="padding:6px 8px;color:#ffd700">勝点</th>
         </tr>
       </thead>
       <tbody id="wc-group-table">
@@ -1628,12 +1628,12 @@ body {
 <!-- WORLDCUP RESULT SCREEN -->
 <div id="screen-worldcup-result" class="screen" style="background:linear-gradient(160deg,#003087 0%,#0050cc 50%,#1a7a3a 100%);align-items:center;justify-content:flex-start;overflow-y:auto">
   <div class="screen-header" style="background:rgba(0,0,0,0.3);width:100%">
-    <div class="screen-title-text" style="color:#ffffff">🏆 グループC 最終結果</div>
+    <div class="screen-title-text" id="wc-result-title" style="color:#ffffff">🏆 グループC 最終結果</div>
   </div>
   <div id="wc-result-content" style="width:100%;max-width:500px;padding:0 16px 8px;box-sizing:border-box"></div>
   <div style="width:100%;max-width:360px;padding:0 16px 32px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px">
-    <button class="start-btn" onclick="resetWCMode()" style="color:#ffffff">🔄 もう一度グループステージ</button>
-    <button class="start-btn" onclick="showScreen('title')" style="background:rgba(255,255,255,0.15);color:#ffffff">🏠 タイトルへ</button>
+    <button class="start-btn" id="wc-btn-replay" onclick="resetWCMode()" style="color:#ffffff">🔄 もう一度グループステージ</button>
+    <button class="start-btn" id="wc-btn-home-title" onclick="showScreen('title')" style="background:rgba(255,255,255,0.15);color:#ffffff">🏠 タイトルへ</button>
   </div>
 </div>
 
@@ -2126,6 +2126,26 @@ const i18n = {
     generatingLabel: '生成中...', regenerateLabel: '🔄 再生成',
     imgAltWin: '勝利！', imgAltLose: '敗北...',
     timeFirst: '前半 1-45分', timeSecond: '後半 46-90分', timeLoss: 'ロスタイム',
+    wcScreenTitle: '🏆 W杯グループステージ', wcGroupLabel: 'GROUP C',
+    wcColTeam: 'チーム', wcColMP: '試', wcColW2: '勝', wcColD2: '分', wcColL2: '敗', wcColGF: '得点', wcColGA: '失点', wcColGD: '得失', wcColPts2: '勝点',
+    wcResultTitle: '🏆 グループC 最終結果', wcBtnReplay: '🔄 もう一度グループステージ', wcBtnTitle: '🏠 タイトルへ',
+    wcNextNed: '⚽ 次へ：日本 vs オランダ', wcNextTun: '⚽ 次へ：日本 vs チュニジア', wcNextSwe: '⚽ 次へ：日本 vs スウェーデン',
+    wcBtnFinal: '🏆 最終順位を見る',
+    wcAdvanced: '🎉 グループ突破！', wcEliminated: '😢 グループ敗退',
+    wcRankLabels: ['1位','2位','3位','4位'], wcRankAdvanced: '通過', wcRankEliminated: '通過（敗退）',
+    wcFinalStandings: 'GROUP C 最終順位',
+    wcJapanResults: '🇯🇵 日本の試合結果', wcAutoResults: '📊 自動演算結果',
+    wcMatchLabel: '第', wcMatchSuffix: '戦', wcRoundLabel: '第', wcRoundSuffix: '節',
+    wcMvpLabel: '🏅 グループ MVP',
+    wcMvpStats: 'ゴール・デュエル勝利 ', wcMvpStatsSuffix: '回',
+    wcAllScorers: '⚽ グループ全得点者', wcGoalUnit: '得点', wcNoGoal: 'ノーゴール',
+    wcDuelRanking: '🥊 デュエル勝率ランキング（全チーム）', wcDuelRateLabel: '勝率',
+    wcAiSummary: '🤖 AI総括', wcAiGenBtn: '✨ AI総括を生成',
+    wcAiPlaceholder: '「✨ AI総括を生成」ボタンを押すと、AIがグループCを総括します',
+    wcGenerating: '⏳ 生成中...', wcGenerated: '✅ 生成済み',
+    wcRateLimit429: '⏳ 上限に達しました',
+    wcRateLimitMsg: '⏳ AI総括の生成上限（1時間あたり3回）に達しました。1時間後にお試しください。',
+    wcRetry: '🔄 再試行', wcConnErrorPrefix: '接続エラー: ', wcStreamErrorPrefix: 'Stream error: ',
   },
   en: {
     titleMain: '',
@@ -2176,10 +2196,33 @@ const i18n = {
     generatingLabel: 'Generating...', regenerateLabel: '🔄 Regenerate',
     imgAltWin: 'Victory!', imgAltLose: 'Defeat...',
     timeFirst: '1st Half (1-45min)', timeSecond: '2nd Half (46-90min)', timeLoss: 'Stoppage',
+    wcScreenTitle: '🏆 WC Group Stage', wcGroupLabel: 'GROUP C',
+    wcColTeam: 'Team', wcColMP: 'MP', wcColW2: 'W', wcColD2: 'D', wcColL2: 'L', wcColGF: 'GF', wcColGA: 'GA', wcColGD: 'GD', wcColPts2: 'Pts',
+    wcResultTitle: '🏆 Group C Final Standings', wcBtnReplay: '🔄 Play Group Stage Again', wcBtnTitle: '🏠 Title',
+    wcNextNed: '⚽ Next: Japan vs Netherlands', wcNextTun: '⚽ Next: Japan vs Tunisia', wcNextSwe: '⚽ Next: Japan vs Sweden',
+    wcBtnFinal: '🏆 View Final Standings',
+    wcAdvanced: '🎉 Group Stage Cleared!', wcEliminated: '😢 Eliminated',
+    wcRankLabels: ['1st','2nd','3rd','4th'], wcRankAdvanced: ' - Advanced', wcRankEliminated: ' - Eliminated',
+    wcFinalStandings: 'GROUP C FINAL STANDINGS',
+    wcJapanResults: '🇯🇵 Japan Results', wcAutoResults: '📊 Simulated Results',
+    wcMatchLabel: 'Match ', wcMatchSuffix: '', wcRoundLabel: 'Round ', wcRoundSuffix: '',
+    wcMvpLabel: '🏅 Group MVP',
+    wcMvpStats: 'goals · ', wcMvpStatsSuffix: ' duel wins',
+    wcAllScorers: '⚽ Group Scorers', wcGoalUnit: 'goal(s)', wcNoGoal: 'No Goals',
+    wcDuelRanking: '🥊 Duel Win Rate (All Teams)', wcDuelRateLabel: '',
+    wcAiSummary: '🤖 AI Summary', wcAiGenBtn: '✨ Generate AI Summary',
+    wcAiPlaceholder: 'Press "✨ Generate AI Summary" to get an AI summary of Group C',
+    wcGenerating: '⏳ Generating...', wcGenerated: '✅ Generated',
+    wcRateLimit429: '⏳ Limit Reached',
+    wcRateLimitMsg: '⏳ AI summary limit reached (3/hr). Please try again in an hour.',
+    wcRetry: '🔄 Retry', wcConnErrorPrefix: 'Connection error: ', wcStreamErrorPrefix: 'Stream error: ',
   }
 };
 
 function t(key) { return (i18n[window.LANG]||i18n.ja)[key] || i18n.ja[key] || key; }
+
+const WC_TEAM_EN = {'日本':'Japan','オランダ':'Netherlands','チュニジア':'Tunisia','スウェーデン':'Sweden'};
+function getWCTeamName(jpName) { return window.LANG === 'en' ? (WC_TEAM_EN[jpName] || jpName) : jpName; }
 
 function getPlayerName(player) {
   if (!player) return '';
@@ -2285,6 +2328,23 @@ function applyLang() {
     playersBody.dataset.built = '';
     playersBody.innerHTML = '';
   }
+  // W杯モード画面
+  _setText('wc-screen-title',  t('wcScreenTitle'));
+  _setText('wc-group-label',   t('wcGroupLabel'));
+  _setText('wc-th-team',  t('wcColTeam'));
+  _setText('wc-th-mp',    t('wcColMP'));
+  _setText('wc-th-w',     t('wcColW2'));
+  _setText('wc-th-d',     t('wcColD2'));
+  _setText('wc-th-l',     t('wcColL2'));
+  _setText('wc-th-gf',    t('wcColGF'));
+  _setText('wc-th-ga',    t('wcColGA'));
+  _setText('wc-th-gd',    t('wcColGD'));
+  _setText('wc-th-pts',   t('wcColPts2'));
+  _setText('wc-result-title', t('wcResultTitle'));
+  var wcRBtn = document.getElementById('wc-btn-replay');  if (wcRBtn) wcRBtn.textContent = t('wcBtnReplay');
+  var wcHBtn = document.getElementById('wc-btn-home-title'); if (wcHBtn) wcHBtn.textContent = t('wcBtnTitle');
+  renderWCTable();
+  updateWCNextBtn();
   // 結果画面ヘッダー
   _setText('header-area-win',    t('headerAreaWin'));
   _setText('header-duel',        t('headerDuel'));
@@ -7074,18 +7134,14 @@ function backToWCScreen() {
 function updateWCNextBtn() {
   const btn = document.getElementById('wc-btn-next');
   if (!btn) return;
-  const labels = [
-    '⚽ 次へ：日本 vs オランダ',
-    '⚽ 次へ：日本 vs チュニジア',
-    '⚽ 次へ：日本 vs スウェーデン',
-  ];
+  const labels = [t('wcNextNed'), t('wcNextTun'), t('wcNextSwe')];
   if (wcMatchIndex < 3) {
     btn.textContent = labels[wcMatchIndex];
     btn.onclick = () => onWCNextBtn();
     btn.style.background = '';
     btn.style.color = '#ffffff';
   } else {
-    btn.textContent = '🏆 最終順位を見る';
+    btn.textContent = t('wcBtnFinal');
     btn.onclick = () => showWCResult();
     btn.style.background = 'linear-gradient(135deg,#b8860b,#ffd700)';
     btn.style.color = '#1a1a1a';
@@ -7106,32 +7162,32 @@ function showWCResult() {
   });
   const japanRank = sorted.indexOf('日本') + 1;
   const advanced  = japanRank <= 2;
-  const rankLabel = ['1位','2位','3位','4位'][japanRank-1];
+  const rankLabel = t('wcRankLabels')[japanRank-1];
   const medals    = ['🥇','🥈','🥉','4️⃣'];
 
   let html = '';
 
   // 突破/敗退
   html += `<div style="text-align:center;padding:20px 0 16px">
-    <div style="font-size:26px;font-weight:700;color:#fff">${advanced ? '🎉 グループ突破！' : '😢 グループ敗退'}</div>
-    <div style="font-size:15px;color:${advanced?'#ffd700':'rgba(255,255,255,0.6)'};margin-top:4px">${rankLabel}通過${advanced?'':'（敗退）'}</div>
+    <div style="font-size:26px;font-weight:700;color:#fff">${advanced ? t('wcAdvanced') : t('wcEliminated')}</div>
+    <div style="font-size:15px;color:${advanced?'#ffd700':'rgba(255,255,255,0.6)'};margin-top:4px">${rankLabel}${advanced ? t('wcRankAdvanced') : t('wcRankEliminated')}</div>
   </div>`;
 
   // 最終順位表
   html += `<div style="background:rgba(0,0,0,0.45);border-radius:12px;padding:8px 4px;margin-bottom:16px">
-    <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:2px;padding:4px 0 8px">GROUP C 最終順位</div>
+    <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:2px;padding:4px 0 8px">${t('wcFinalStandings')}</div>
     <table style="width:100%;border-collapse:collapse;font-size:12px;color:#fff">
       <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5)">
-        <th style="padding:4px 6px">#</th><th style="text-align:left;padding:4px 4px">チーム</th>
-        <th style="padding:4px 5px">勝点</th><th style="padding:4px 5px">勝</th><th style="padding:4px 5px">分</th>
-        <th style="padding:4px 5px">敗</th><th style="padding:4px 5px">得</th><th style="padding:4px 5px">失</th><th style="padding:4px 5px">得失</th>
+        <th style="padding:4px 6px">#</th><th style="text-align:left;padding:4px 4px">${t('wcColTeam')}</th>
+        <th style="padding:4px 5px">${t('wcColPts2')}</th><th style="padding:4px 5px">${t('wcColW2')}</th><th style="padding:4px 5px">${t('wcColD2')}</th>
+        <th style="padding:4px 5px">${t('wcColL2')}</th><th style="padding:4px 5px">${t('wcColGF')}</th><th style="padding:4px 5px">${t('wcColGA')}</th><th style="padding:4px 5px">${t('wcColGD')}</th>
       </tr></thead><tbody>`;
   sorted.forEach((name,i) => {
     const s=wcStandings[name];
     const bg = name==='日本' ? 'background:rgba(255,255,255,0.12)' : '';
     html += `<tr style="${bg}">
       <td style="text-align:center;padding:7px 6px">${medals[i]}</td>
-      <td style="padding:7px 4px">${s.flag} ${name}</td>
+      <td style="padding:7px 4px">${s.flag} ${getWCTeamName(name)}</td>
       <td style="text-align:center;padding:7px 5px;color:#ffd700;font-weight:700">${s.pts}</td>
       <td style="text-align:center;padding:7px 5px">${s.w}</td><td style="text-align:center;padding:7px 5px">${s.d}</td>
       <td style="text-align:center;padding:7px 5px">${s.l}</td><td style="text-align:center;padding:7px 5px">${s.gf}</td>
@@ -7143,10 +7199,11 @@ function showWCResult() {
   // 日本戦スコア
   if (wcMatchScores.length > 0) {
     html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:12px">
-      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">🇯🇵 日本の試合結果</div>`;
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">${t('wcJapanResults')}</div>`;
     wcMatchScores.forEach(m => {
+      const matchLbl = `${t('wcMatchLabel')}${m.matchNum}${t('wcMatchSuffix')}`;
       html += `<div style="padding:8px 14px;color:#fff;font-size:13px;font-weight:700;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.07)">
-        <span>第${m.matchNum}戦</span><span>${m.t1flag} ${m.t1name} ${m.s1}–${m.s2} ${m.t2flag} ${m.t2name}</span></div>`;
+        <span>${matchLbl}</span><span>${m.t1flag} ${m.t1name} ${m.s1}–${m.s2} ${m.t2flag} ${m.t2name}</span></div>`;
     });
     html += `</div>`;
   }
@@ -7154,10 +7211,11 @@ function showWCResult() {
   // 自動演算スコア
   if (wcAutoScores.length > 0) {
     html += `<div style="background:rgba(0,0,0,0.25);border-radius:10px;overflow:hidden;margin-bottom:16px">
-      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.07)">📊 自動演算結果</div>`;
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.07)">${t('wcAutoResults')}</div>`;
     wcAutoScores.forEach((m,i) => {
+      const roundLbl = `${t('wcRoundLabel')}${i+1}${t('wcRoundSuffix')}`;
       html += `<div style="padding:7px 14px;color:rgba(255,255,255,0.7);font-size:12px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05)">
-        <span>第${i+1}節</span><span>${m.t1flag} ${m.t1name} ${m.t1score}–${m.t2score} ${m.t2flag} ${m.t2name}</span></div>`;
+        <span>${roundLbl}</span><span>${m.t1flag} ${m.t1name} ${m.t1score}–${m.t2score} ${m.t2flag} ${m.t2name}</span></div>`;
     });
     html += `</div>`;
   }
@@ -7183,23 +7241,26 @@ function showWCResult() {
     const [mvpName, mvpSt] = _allEntries.sort((a,b) =>
       (b[1].goals*3 + b[1].duelWins) - (a[1].goals*3 + a[1].duelWins)
     )[0];
+    const mvpStatsText = window.LANG === 'en'
+      ? `${mvpSt.goals} ${t('wcMvpStats')}${mvpSt.duelWins}${t('wcMvpStatsSuffix')}`
+      : `${mvpSt.goals}${t('wcMvpStats')}${mvpSt.duelWins}${t('wcMvpStatsSuffix')}`;
     html += `<div style="background:rgba(184,134,11,0.3);border:1px solid rgba(255,215,0,0.4);border-radius:10px;padding:14px;margin-bottom:8px;text-align:center">
-      <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;margin-bottom:6px">🏅 グループ MVP</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:4px">${mvpSt.teamFlag} ${mvpSt.teamName}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;margin-bottom:6px">${t('wcMvpLabel')}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:4px">${mvpSt.teamFlag} ${getWCTeamName(mvpSt.teamName)}</div>
       <div style="font-size:22px;font-weight:700;color:#ffd700">${mvpName}</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px">${mvpSt.goals}ゴール・デュエル勝利 ${mvpSt.duelWins}回</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px">${mvpStatsText}</div>
     </div>`;
   }
 
   // グループ全得点者一覧
   const allScorers = [];
   wcGoalScorers.forEach(g => {
-    allScorers.push({label: `第${g.matchNum}戦`, time: g.time, name: g.name, teamFlag: '🇯🇵', teamName: '日本'});
+    allScorers.push({time: g.time, name: g.name, teamFlag: '🇯🇵', teamName: '日本'});
   });
   wcAutoScores.forEach((m, i) => {
     if (m.goalScorers) {
       m.goalScorers.forEach(g => {
-        allScorers.push({label: `第${i+1}節(自動)`, time: g.time, name: g.name, teamFlag: g.teamFlag || m.t1flag, teamName: g.teamName || m.t1name});
+        allScorers.push({time: g.time, name: g.name, teamFlag: g.teamFlag || m.t1flag, teamName: g.teamName || m.t1name});
       });
     }
   });
@@ -7213,14 +7274,14 @@ function showWCResult() {
   const scorerList = Object.values(scorerMap).sort((a,b) => b.goals - a.goals);
   if (scorerList.length > 0) {
     html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:12px">
-      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">⚽ グループ全得点者</div>`;
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">${t('wcAllScorers')}</div>`;
     scorerList.forEach(g => {
       html += `<div style="padding:7px 14px;color:#fff;font-size:13px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06)">
-        <span>${g.name} ${g.teamFlag}</span><span style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:700">${g.goals}得点</span></div>`;
+        <span>${g.name} ${g.teamFlag}</span><span style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:700">${g.goals} ${t('wcGoalUnit')}</span></div>`;
     });
     html += `</div>`;
   } else {
-    html += `<div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;color:rgba(255,255,255,0.45);font-size:13px;text-align:center">ノーゴール</div>`;
+    html += `<div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;color:rgba(255,255,255,0.45);font-size:13px;text-align:center">${t('wcNoGoal')}</div>`;
   }
 
   // デュエル勝率ランキング（全チーム・上位5名、3回未満除外）
@@ -7231,13 +7292,14 @@ function showWCResult() {
     .slice(0, 5);
   if (duelRanking.length > 0) {
     html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:16px">
-      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">🥊 デュエル勝率ランキング（全チーム）</div>`;
+      <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08)">${t('wcDuelRanking')}</div>`;
     duelRanking.forEach(([name, st, rate]) => {
       const pct = Math.round(rate * 100);
+      const rateLabel = window.LANG === 'en' ? `${pct}% Win Rate` : `${t('wcDuelRateLabel')}${pct}%`;
       html += `<div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06)">
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span style="color:#fff;font-size:13px;font-weight:700">${name} <span style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:400">${st.teamFlag} ${st.teamName}</span></span>
-          <span style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:700">勝率${pct}%</span>
+          <span style="color:#fff;font-size:13px;font-weight:700">${name} <span style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:400">${st.teamFlag} ${getWCTeamName(st.teamName)}</span></span>
+          <span style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:700">${rateLabel}</span>
         </div>
         <div style="background:rgba(255,255,255,0.15);border-radius:4px;height:6px">
           <div style="width:${pct}%;height:100%;background:#4a9eff;border-radius:4px"></div>
@@ -7250,11 +7312,11 @@ function showWCResult() {
   // AI総括
   html += `<div style="background:rgba(0,0,0,0.35);border-radius:10px;overflow:hidden;margin-bottom:16px">
     <div style="padding:8px 12px;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between">
-      <span>🤖 AI総括</span>
-      <button id="wc-summary-btn" onclick="generateWCSummary()" style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;font-family:inherit;font-weight:700">✨ AI総括を生成</button>
+      <span>${t('wcAiSummary')}</span>
+      <button id="wc-summary-btn" onclick="generateWCSummary()" style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#fff;cursor:pointer;font-family:inherit;font-weight:700">${t('wcAiGenBtn')}</button>
     </div>
     <div id="wc-summary-content" style="padding:12px;font-size:13px;line-height:1.9;color:rgba(255,255,255,0.85)">
-      <span style="color:rgba(255,255,255,0.35);font-size:12px">「✨ AI総括を生成」ボタンを押すと、AIがグループCを総括します</span>
+      <span style="color:rgba(255,255,255,0.35);font-size:12px">${t('wcAiPlaceholder')}</span>
     </div>
   </div>`;
 
@@ -7268,9 +7330,9 @@ function generateWCSummary() {
   var btn = document.getElementById('wc-summary-btn');
   var el  = document.getElementById('wc-summary-content');
   btn.disabled = true;
-  btn.textContent = '⏳ 生成中...';
+  btn.textContent = t('wcGenerating');
   btn.style.opacity = '0.6';
-  el.innerHTML = '<span style="color:rgba(255,255,255,0.4);font-size:12px">✨ 生成中...</span>';
+  el.innerHTML = '<span style="color:rgba(255,255,255,0.4);font-size:12px">' + t('wcGenerating') + '</span>';
 
   // 最終順位テキスト
   var names = ['日本','オランダ','チュニジア','スウェーデン'];
@@ -7349,11 +7411,11 @@ function generateWCSummary() {
   fetch(WORKER_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ matchData: matchData, lang: 'ja' }),
+    body: JSON.stringify({ matchData: matchData, lang: window.LANG }),
   }).then(function(res) {
     if (res.status === 429) {
-      el.innerHTML = '<span style="color:#e67e00;font-size:12px;line-height:1.7">⏳ AI総括の生成上限（1時間あたり3回）に達しました。1時間後にお試しください。</span>';
-      btn.textContent = '⏳ 上限に達しました';
+      el.innerHTML = '<span style="color:#e67e00;font-size:12px;line-height:1.7">' + t('wcRateLimitMsg') + '</span>';
+      btn.textContent = t('wcRateLimit429');
       btn.disabled = true;
       btn.style.opacity = '0.6';
       return;
@@ -7371,7 +7433,7 @@ function generateWCSummary() {
     function read() {
       reader.read().then(function(chunk) {
         if (chunk.done) {
-          btn.textContent = '✅ 生成済み';
+          btn.textContent = t('wcGenerated');
           btn.disabled = true;
           btn.style.opacity = '0.6';
           return;
@@ -7393,8 +7455,8 @@ function generateWCSummary() {
         });
         read();
       }).catch(function(err) {
-        el.innerHTML = '<span style="color:#ff6b6b;font-size:11px">Stream error: ' + err.message + '</span>';
-        btn.textContent = '🔄 再試行';
+        el.innerHTML = '<span style="color:#ff6b6b;font-size:11px">' + t('wcStreamErrorPrefix') + err.message + '</span>';
+        btn.textContent = t('wcRetry');
         btn.disabled = false;
         btn.style.opacity = '1';
       });
@@ -7402,13 +7464,13 @@ function generateWCSummary() {
     read();
   }).catch(function(err) {
     if (err.message && err.message.indexOf('429') !== -1) {
-      el.innerHTML = '<span style="color:#e67e00;font-size:12px;line-height:1.7">⏳ AI総括の生成上限に達しました。1時間後にお試しください。</span>';
-      btn.textContent = '⏳ 上限に達しました';
+      el.innerHTML = '<span style="color:#e67e00;font-size:12px;line-height:1.7">' + t('wcRateLimitMsg') + '</span>';
+      btn.textContent = t('wcRateLimit429');
       btn.disabled = true;
       btn.style.opacity = '0.6';
     } else {
-      el.innerHTML = '<span style="color:#ff6b6b;font-size:11px">接続エラー: ' + err.message + '</span>';
-      btn.textContent = '🔄 再試行';
+      el.innerHTML = '<span style="color:#ff6b6b;font-size:11px">' + t('wcConnErrorPrefix') + err.message + '</span>';
+      btn.textContent = t('wcRetry');
       btn.disabled = false;
       btn.style.opacity = '1';
     }
@@ -7454,7 +7516,7 @@ function renderWCTable() {
     const s = wcStandings[name];
     const td = (v, ex) => `<td style="text-align:center;padding:7px 8px${ex||''}">${v}</td>`;
     return `<tr>
-      <td style="padding:7px 4px">${s.flag} ${name}</td>
+      <td style="padding:7px 4px">${s.flag} ${getWCTeamName(name)}</td>
       ${td(s.p)}${td(s.w)}${td(s.d)}${td(s.l)}${td(s.gf)}${td(s.ga)}${td(s.gd)}
       ${td(s.pts, ';color:#ffd700;font-weight:700')}
     </tr>`;
