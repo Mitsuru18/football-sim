@@ -1513,7 +1513,7 @@ body {
 
     <!-- 単発試合セクション -->
     <div class="other-matches-section">
-      <div class="other-matches-heading">⚽ その他の試合</div>
+      <div id="other-matches-heading" class="other-matches-heading">⚽ その他の試合</div>
       <div class="match-list">
       <div class="match-card" onclick="selectMatch('2026vsオランダ')">
         <div class="match-date" id="match-date-ned">2026年6月14日 ・ W杯グループステージ</div>
@@ -2349,6 +2349,7 @@ function applyLang() {
   var wcHBtn = document.getElementById('wc-btn-home-title'); if (wcHBtn) wcHBtn.textContent = t('wcBtnTitle');
   var wcBBtn = document.getElementById('wc-result-back-btn'); if (wcBBtn) wcBBtn.textContent = t('wcBtnBackToGroup');
   var wcModeBtn = document.getElementById('btn-wc-mode'); if (wcModeBtn) wcModeBtn.textContent = window.LANG === 'en' ? '🏆 W-CUP 2026 MODE' : '🏆 W杯モードを始める';
+  _setText('other-matches-heading', window.LANG === 'en' ? '⚽ Other Matches' : '⚽ その他の試合');
   renderWCTable();
   updateWCNextBtn();
   // 結果画面ヘッダー
