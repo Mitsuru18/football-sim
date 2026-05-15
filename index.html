@@ -88,9 +88,23 @@ body {
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 40px 20px;
+  padding: 0;
   max-width: 600px;
   width: 100%;
+}
+
+.title-hero {
+  background: linear-gradient(160deg, #0c3b1c 0%, #0d2340 55%, #060e1f 100%);
+  padding: 28px 24px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.title-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(255,255,255,0.018) 28px, rgba(255,255,255,0.018) 29px);
+  pointer-events: none;
 }
 
 .title-emblem {
@@ -114,26 +128,58 @@ body {
 }
 
 .title-sub {
-  font-size: clamp(18px, 4.5vw, 28px);
-  color: var(--gold);
-  letter-spacing: 3px;
-  margin-top: 4px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(34px, 8.5vw, 60px);
+  letter-spacing: 5px;
+  color: #ffffff;
+  text-shadow: 0 0 60px rgba(80,200,80,0.2), 0 3px 12px rgba(0,0,0,0.9);
+  line-height: 1;
+  margin-top: 0;
+  font-weight: 400;
+  position: relative;
+}
+
+.title-wc-copy {
+  font-size: clamp(10px, 2.4vw, 13px);
+  color: rgba(255,215,0,0.8);
+  letter-spacing: 2px;
+  margin: 10px 0 32px;
   font-weight: 700;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.other-matches-section {
+  padding: 0 16px 8px;
+}
+
+.other-matches-heading {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 2px;
+  padding: 18px 0 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 10px;
+  text-align: left;
 }
 
 .match-list {
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
   width: 100%;
+}
+@media (min-width: 480px) {
+  .match-list { grid-template-columns: repeat(2, 1fr); }
 }
 
 .match-card {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 12px;
-  padding: 20px 24px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 10px 14px;
   cursor: pointer;
   transition: all 0.3s;
   text-align: left;
@@ -153,7 +199,7 @@ body {
 .match-card:hover {
   border-color: var(--gold);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(212,175,55,0.15);
+  box-shadow: 0 6px 20px rgba(212,175,55,0.15);
 }
 
 .match-card:hover::before { opacity: 1; }
@@ -161,31 +207,31 @@ body {
 .match-flags {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 3px;
 }
 
-.flag-emoji { font-size: 28px; }
-.vs-text { font-size: 12px; color: var(--text-dim); font-weight: 700; letter-spacing: 2px; }
+.flag-emoji { font-size: 20px; }
+.vs-text { font-size: 11px; color: var(--text-dim); font-weight: 700; letter-spacing: 2px; }
 
 .match-title-text {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: white;
 }
 
 .match-desc {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-dim);
-  margin-top: 4px;
-  line-height: 1.5;
+  margin-top: 2px;
+  line-height: 1.4;
 }
 
 .match-date {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--gold);
   letter-spacing: 1px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 /* ===== SETTING SCREEN ===== */
@@ -1449,19 +1495,26 @@ body {
 
 <div id="screen-title" class="screen active">
   <div class="title-content">
-    <div class="title-emblem" style="display:none">⚽</div>
-    <div class="title-main" id="title-main-text" style="display:none"></div>
-    <div class="title-sub">Football Simulation Lab ⚽</div>
+    <!-- ヒーローセクション -->
+    <div class="title-hero">
+      <div class="title-emblem" style="display:none">⚽</div>
+      <div class="title-main" id="title-main-text" style="display:none"></div>
 
-    <!-- 言語切り替えボタン -->
-    <div style="display:flex;gap:8px;justify-content:center;margin:10px 0 4px">
-      <button id="lang-btn-ja" onclick="setLang('ja')" style="padding:6px 18px;border-radius:20px;border:2px solid rgba(255,255,255,0.5);background:transparent;color:rgba(255,255,255,0.7);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🇯🇵 日本語</button>
-      <button id="lang-btn-en" onclick="setLang('en')" style="padding:6px 18px;border-radius:20px;border:2px solid #fff;background:#fff;color:var(--japan-blue);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🇬🇧 English</button>
+      <!-- 言語切り替えボタン（上部・小さく） -->
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:28px;position:relative">
+        <button id="lang-btn-ja" onclick="setLang('ja')" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.4);background:transparent;color:rgba(255,255,255,0.65);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🇯🇵 日本語</button>
+        <button id="lang-btn-en" onclick="setLang('en')" style="padding:5px 14px;border-radius:20px;border:1px solid #fff;background:#fff;color:var(--japan-blue);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🇬🇧 English</button>
+      </div>
+
+      <div class="title-sub">Football Simulation Lab</div>
+
+      <button onclick="showScreen('worldcup')" class="start-btn" style="width:100%;max-width:380px;margin:0 auto;display:block;background:linear-gradient(135deg,#b8860b,#ffd700);color:#1a1a1a;font-size:20px;padding:22px 24px;letter-spacing:3px;border-radius:14px">🏆 W杯モードを始める</button>
     </div>
 
-    <button onclick="showScreen('worldcup')" class="start-btn" style="width:100%;max-width:360px;margin:16px auto 8px;display:block;background:linear-gradient(135deg,#b8860b,#ffd700);color:#1a1a1a">🏆 W杯モード</button>
-
-    <div class="match-list">
+    <!-- 単発試合セクション -->
+    <div class="other-matches-section">
+      <div class="other-matches-heading">⚽ その他の試合</div>
+      <div class="match-list">
       <div class="match-card" onclick="selectMatch('2026vsオランダ')">
         <div class="match-date" id="match-date-ned">2026年6月14日 ・ W杯グループステージ</div>
         <div class="match-flags">
@@ -1522,7 +1575,8 @@ body {
         <div class="match-title-text" id="match-title-bel">日本 vs ベルギー</div>
         <div class="match-desc" id="match-desc-bel">2点リードから逆転負けを喫した伝説の一戦。日本サッカー史上最高の舞台に挑む！</div>
       </div>
-    </div>
+      </div><!-- /match-list -->
+    </div><!-- /other-matches-section -->
     <button onclick="showScreen('players')" class="players-link-btn" id="btn-players-list">📋 選手データリスト</button>
     <div id="title-patreon-banner"></div>
     <div class="disclaimer-box" id="disclaimer-text">
