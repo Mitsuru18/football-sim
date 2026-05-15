@@ -1508,7 +1508,7 @@ body {
 
       <div class="title-sub">Football Simulation Lab</div>
 
-      <button id="btn-wc-mode" onclick="showScreen('worldcup')" class="start-btn" style="width:100%;max-width:380px;margin:0 auto;display:block;background:linear-gradient(135deg,#b8860b,#ffd700);color:#1a1a1a;font-size:20px;padding:22px 24px;letter-spacing:3px;border-radius:14px">🏆 W杯モードを始める</button>
+      <button id="btn-wc-mode" onclick="showScreen('worldcup')" class="start-btn" style="width:100%;max-width:380px;margin:0 auto;display:block;background:linear-gradient(135deg,#b8860b,#ffd700);color:#1a1a1a;font-size:1.6rem;padding:22px 24px;letter-spacing:0.1em;border-radius:14px;font-family:'Bebas Neue',sans-serif">🏆 W杯モードを始める</button>
     </div>
 
     <!-- 単発試合セクション -->
@@ -2348,7 +2348,7 @@ function applyLang() {
   var wcRBtn = document.getElementById('wc-btn-replay');  if (wcRBtn) wcRBtn.textContent = t('wcBtnReplay');
   var wcHBtn = document.getElementById('wc-btn-home-title'); if (wcHBtn) wcHBtn.textContent = t('wcBtnTitle');
   var wcBBtn = document.getElementById('wc-result-back-btn'); if (wcBBtn) wcBBtn.textContent = t('wcBtnBackToGroup');
-  var wcModeBtn = document.getElementById('btn-wc-mode'); if (wcModeBtn) wcModeBtn.textContent = window.LANG === 'en' ? '🏆 World Cup Mode' : '🏆 W杯モードを始める';
+  var wcModeBtn = document.getElementById('btn-wc-mode'); if (wcModeBtn) wcModeBtn.textContent = window.LANG === 'en' ? '🏆 W-CUP 2026 MODE' : '🏆 W杯モードを始める';
   renderWCTable();
   updateWCNextBtn();
   // 結果画面ヘッダー
