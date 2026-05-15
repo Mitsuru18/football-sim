@@ -2146,6 +2146,8 @@ const i18n = {
     wcRateLimit429: '⏳ 上限に達しました',
     wcRateLimitMsg: '⏳ AI総括の生成上限（1時間あたり3回）に達しました。1時間後にお試しください。',
     wcRetry: '🔄 再試行', wcConnErrorPrefix: '接続エラー: ', wcStreamErrorPrefix: 'Stream error: ',
+    wcBtnBackToGroup: '🏆 グループへ', wcAutoSimulated: '※自動演算',
+    wcDoneMatchLabel: '第', wcDoneMatchSuffix: '戦',
   },
   en: {
     titleMain: '',
@@ -2216,6 +2218,8 @@ const i18n = {
     wcRateLimit429: '⏳ Limit Reached',
     wcRateLimitMsg: '⏳ AI summary limit reached (3/hr). Please try again in an hour.',
     wcRetry: '🔄 Retry', wcConnErrorPrefix: 'Connection error: ', wcStreamErrorPrefix: 'Stream error: ',
+    wcBtnBackToGroup: '🏆 Back to Group', wcAutoSimulated: '※Simulated',
+    wcDoneMatchLabel: 'Match ', wcDoneMatchSuffix: '',
   }
 };
 
@@ -2343,6 +2347,7 @@ function applyLang() {
   _setText('wc-result-title', t('wcResultTitle'));
   var wcRBtn = document.getElementById('wc-btn-replay');  if (wcRBtn) wcRBtn.textContent = t('wcBtnReplay');
   var wcHBtn = document.getElementById('wc-btn-home-title'); if (wcHBtn) wcHBtn.textContent = t('wcBtnTitle');
+  var wcBBtn = document.getElementById('wc-result-back-btn'); if (wcBBtn) wcBBtn.textContent = t('wcBtnBackToGroup');
   renderWCTable();
   updateWCNextBtn();
   // 結果画面ヘッダー
@@ -7102,7 +7107,7 @@ function updateWCAfterResult() {
   });
   const el = document.getElementById('wc-auto-results');
   if (el) {
-    const line = `${auto.t1data.flag} ${auto.t1data.name} ${auto.t1score}–${auto.t2score} ${auto.t2data.name} ${auto.t2data.flag} ※自動演算`;
+    const line = `${auto.t1data.flag} ${auto.t1data.name} ${auto.t1score}–${auto.t2score} ${auto.t2data.name} ${auto.t2data.flag} ${t('wcAutoSimulated')}`;
     el.innerHTML += (el.innerHTML ? '<br>' : '') + line;
     el.style.display = '';
   }
@@ -7122,7 +7127,8 @@ function backToWCScreen() {
   if (el) {
     const row = document.createElement('div');
     row.style.cssText = 'padding:8px 14px;background:rgba(0,0,0,0.45);color:#ffffff;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1)';
-    row.innerHTML = `<span>🏁 第${wcMatchIndex}戦</span><span>${team1Data.flag} ${team1Data.name} ${s1}–${s2} ${team2Data.flag} ${team2Data.name}</span>`;
+    const doneMatchLbl = `${t('wcDoneMatchLabel')}${wcMatchIndex}${t('wcDoneMatchSuffix')}`;
+    row.innerHTML = `<span>🏁 ${doneMatchLbl}</span><span>${team1Data.flag} ${team1Data.name} ${s1}–${s2} ${team2Data.flag} ${team2Data.name}</span>`;
     el.appendChild(row);
     el.style.display = '';
   }
