@@ -4865,7 +4865,7 @@ function simulateChance(gs, chanceNo) {
       let midResult;
       if (Math.random() * 100 > midOfsPoint) {
         midResult = '枠を外した！';
-      } else if (midOfsPoint > midDfsPoint) {
+      } else if (Math.random() < (midOfsPoint * midOfsPoint) / (midOfsPoint * midOfsPoint + midDfsPoint * midDfsPoint)) {
         midResult = 'ゴール！！';
         offence.score++;
         goalScored = offence;
@@ -4898,7 +4898,7 @@ function simulateChance(gs, chanceNo) {
     let shootResult;
     if (Math.random() * 100 > ofsPoint) {
       shootResult = '枠を外した！';
-    } else if (ofsPoint > dfsPoint) {
+    } else if (Math.random() < (ofsPoint * ofsPoint) / (ofsPoint * ofsPoint + dfsPoint * dfsPoint)) {
       shootResult = 'ゴール！！';
       offence.score++;
       goalScored = offence;
@@ -5007,7 +5007,7 @@ function simulateChance(gs, chanceNo) {
       let shootResult;
       if (Math.random() * 100 > ofsPoint) {
         shootResult = '枠を外した！';
-      } else if (ofsPoint > dfsPoint) {
+      } else if (Math.random() < (ofsPoint * ofsPoint) / (ofsPoint * ofsPoint + dfsPoint * dfsPoint)) {
         shootResult = 'ゴール！！';
         offence.score++;
         goalScored = offence;
