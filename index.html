@@ -1509,6 +1509,16 @@ body {
       <div class="title-sub">Football Simulation Lab</div>
 
       <button id="btn-wc-mode" onclick="showScreen('worldcup')" class="start-btn" style="width:100%;max-width:380px;margin:0 auto;display:block;background:linear-gradient(135deg,#b8860b,#ffd700);color:#1a1a1a;font-size:1.6rem;padding:22px 24px;letter-spacing:0.1em;border-radius:14px;font-family:'Bebas Neue',sans-serif">🏆 W杯モードを始める</button>
+
+      <!-- デバッグパネル（?debug=1 時のみ表示） -->
+      <div id="debug-panel" style="display:none;width:100%;max-width:380px;margin:12px auto 0;background:rgba(0,0,0,0.06);border:1px dashed #bbb;border-radius:8px;padding:10px 12px;box-sizing:border-box">
+        <div style="font-size:10px;color:#888;letter-spacing:1px;margin-bottom:6px;font-weight:700">🔧 DEBUG MODE</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button onclick="showWCR32(1)" style="padding:6px 12px;font-size:12px;border-radius:6px;border:1px solid #bbb;background:#f0f0f0;color:#444;cursor:pointer;font-family:inherit;font-weight:700;text-align:left">🔧 R32: 日本vsモロッコ（1位通過）</button>
+          <button onclick="showWCR32(2)" style="padding:6px 12px;font-size:12px;border-radius:6px;border:1px solid #bbb;background:#f0f0f0;color:#444;cursor:pointer;font-family:inherit;font-weight:700;text-align:left">🔧 R32: 日本vsブラジル（2位通過）</button>
+          <button onclick="debugForceDrawPK()" id="debug-forcedraw-btn" style="padding:6px 12px;font-size:12px;border-radius:6px;border:1px solid #bbb;background:#f0f0f0;color:#444;cursor:pointer;font-family:inherit;font-weight:700;text-align:left">🔧 延長PK強制（次のR32試合のみ）</button>
+        </div>
+      </div>
     </div>
 
     <!-- 単発試合セクション -->
@@ -1670,6 +1680,44 @@ body {
     <div style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:32px">W杯ラウンド32で敗退しました</div>
     <button class="start-btn" onclick="resetWCMode()" style="color:#ffffff;margin-bottom:12px">🔄 もう一度</button>
     <button class="start-btn" onclick="showScreen('title')" style="background:rgba(255,255,255,0.15);color:#ffffff">🏠 タイトルへ</button>
+  </div>
+</div>
+
+<!-- WC PK SCREEN -->
+<div id="screen-worldcup-pk" class="screen" style="background:linear-gradient(160deg,#0a0a2e 0%,#1a0a3e 100%);align-items:center;justify-content:flex-start;overflow-y:auto">
+  <div style="width:100%;max-width:480px;padding:24px 16px;box-sizing:border-box">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:14px;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:4px">🥅 PK戦</div>
+      <div id="pk-round-label" style="font-size:12px;color:rgba(255,255,255,0.45)">第1キック</div>
+    </div>
+    <div style="display:flex;justify-content:center;align-items:flex-start;gap:16px;margin-bottom:20px;background:rgba(0,0,0,0.45);border-radius:14px;padding:16px">
+      <div style="text-align:center;flex:1">
+        <div id="pk-name1" style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:4px">JAPAN</div>
+        <div id="pk-score1" style="font-size:44px;font-weight:900;color:#fff;line-height:1">0</div>
+        <div id="pk-kicks1" style="font-size:13px;letter-spacing:1px;min-height:18px;color:#fff;margin-top:6px;word-break:break-all"></div>
+      </div>
+      <div style="font-size:24px;color:rgba(255,255,255,0.35);font-weight:900;padding-top:14px">-</div>
+      <div style="text-align:center;flex:1">
+        <div id="pk-name2" style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:4px">相手</div>
+        <div id="pk-score2" style="font-size:44px;font-weight:900;color:#fff;line-height:1">0</div>
+        <div id="pk-kicks2" style="font-size:13px;letter-spacing:1px;min-height:18px;color:#fff;margin-top:6px;word-break:break-all"></div>
+      </div>
+    </div>
+    <div id="pk-kicker-box" style="text-align:center;background:rgba(255,255,255,0.06);border-radius:16px;padding:24px 16px;margin-bottom:16px">
+      <div id="pk-team-label" style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:8px">のキック</div>
+      <div id="pk-player-flag" style="font-size:40px;margin-bottom:6px">🇯🇵</div>
+      <div id="pk-player-name" style="font-size:22px;font-weight:700;color:#fff;margin-bottom:4px">選手名</div>
+      <div id="pk-player-pos" style="font-size:12px;color:rgba(255,255,255,0.4)">FW</div>
+    </div>
+    <div id="pk-result-display" style="display:none;text-align:center;padding:16px 0;margin-bottom:16px">
+      <div id="pk-result-emoji" style="font-size:60px;margin-bottom:8px">⚽</div>
+      <div id="pk-result-text" style="font-size:22px;font-weight:700;color:#fff">ゴール！</div>
+      <div id="pk-result-img-wrap" style="display:none;width:100%;max-width:360px;margin:12px auto 0;border-radius:12px;overflow:hidden">
+        <img id="pk-result-img" src="" alt="" style="width:100%;display:block">
+      </div>
+    </div>
+    <button id="pk-kick-btn" onclick="stepWCPK_kick()" style="width:100%;padding:18px;font-size:18px;font-weight:700;border:none;border-radius:14px;background:linear-gradient(135deg,#c8102e,#e63950);color:#fff;cursor:pointer;font-family:inherit;margin-bottom:10px;box-sizing:border-box">⚽ キック！</button>
+    <button id="pk-next-btn" onclick="stepWCPK_next()" style="display:none;width:100%;padding:16px;font-size:16px;font-weight:700;border:none;border-radius:14px;background:linear-gradient(135deg,#1a7a3a,#27ae60);color:#fff;cursor:pointer;font-family:inherit;box-sizing:border-box">次へ →</button>
   </div>
 </div>
 
@@ -1868,6 +1916,9 @@ body {
 
     <div class="stats-grid" id="stats-grid"></div>
 
+    <!-- 延長戦・PK戦結果（WCトーナメント用） -->
+    <div id="wc-et-pk-result" style="display:none;width:100%;max-width:480px;padding:4px 0;box-sizing:border-box"></div>
+
     <!-- 結果画像 -->
     <div class="result-img-wrap" id="result-img-wrap">
       <img id="result-img" src="" alt="">
@@ -1877,6 +1928,7 @@ body {
       <button id="btn-retry" class="retry-btn" onclick="retryGame()">🔄 もう一度</button>
       <button id="btn-home" class="home-btn" onclick="showScreen('title')">🏠 トップへ</button>
       <button id="wc-result-back-btn" class="home-btn" style="display:none;background:linear-gradient(135deg,#003087,#0050cc);color:#ffffff" onclick="backToWCScreen()">🏆 グループへ</button>
+      <button id="wc-et-btn" class="start-btn" style="display:none;background:linear-gradient(135deg,#1a7a3a,#27ae60);color:#ffffff" onclick="onWCEtBtnClick()">⚽ 延長戦へ</button>
     </div>
 
     <!-- シェアボタン群 -->
@@ -2108,6 +2160,16 @@ body {
 //   → 各戦術のカウンター率を上書きする（最優先）
 // ============================================================
 // i18n
+// ============================================================
+// デバッグモード（URLパラメータ ?debug=1 で有効）
+const DEBUG_MODE = new URLSearchParams(window.location.search).get('debug') === '1';
+if (DEBUG_MODE) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const p = document.getElementById('debug-panel');
+    if (p) p.style.display = '';
+  });
+}
+
 // ============================================================
 // ブラウザ言語が日本語なら日本語、それ以外は英語をデフォルトに
 window.LANG = (navigator.language || navigator.userLanguage || '').toLowerCase().startsWith('ja') ? 'ja' : 'en';
@@ -3347,6 +3409,13 @@ let isWorldCupMode = false;
 let wcMatchIndex = 0; // 日本の試合済み数 (0〜3)
 let wcR32Opponent = null;
 let isWCR32Mode = false;
+let wcPhase = '';
+let wcETScore = {t1: 0, t2: 0};
+let wcMatchLog = [];
+let _wcETSubPending = false;
+let wcCumulativeStats = {chances1:0,shots1:0,saves1:0,chances2:0,shots2:0,saves2:0};
+let wcForceDrawPK = false;
+let pkState = null;
 let wcStandings = {
   '日本':        {flag:'🇯🇵', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},
   'オランダ':    {flag:'🇳🇱', p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0},
@@ -4405,6 +4474,9 @@ function closeModal(id) {
 // ============================================================
 
 function startGame() {
+  // 延長戦は _runWCETPhase() で処理するため setting 画面からは実行しない
+  if (wcPhase === 'et_first' || wcPhase === 'et_second') return;
+
   // Setup opponent state
   const t2sys = system_data.findIndex(s => s.name === team2Data.default_system);
   team2State = {
@@ -4446,16 +4518,16 @@ function startGame() {
     });
   });
 
-  // Pre-simulate 12 chances（前半5 + 後半5 + ロスタイム最大2）
-  // 前半ロスタイム(chanceNo=5)は50%、後半ロスタイム(chanceNo=11)は必ず発生
-  for (let i = 0; i < 12; i++) {
-    const result = simulateChance(gameState, i);
-    chanceResults.push(result);
-  }
-  // ロスタイムは50%で発生
-  if (Math.random() < 0.5) {
-    const result = simulateChance(gameState, 12);
-    chanceResults.push(result);
+  // Pre-simulate chances（延長戦はシーン数を削減）
+  if (wcPhase === 'et_first') {
+    for (let i = 0; i < 3; i++) chanceResults.push(simulateChance(gameState, i));
+  } else if (wcPhase === 'et_second') {
+    for (let i = 0; i < 3; i++) chanceResults.push(simulateChance(gameState, i));
+    if (Math.random() < 0.5) chanceResults.push(simulateChance(gameState, 3));
+  } else {
+    // 通常: 前半5 + 後半5 + ロスタイム最大2
+    for (let i = 0; i < 12; i++) chanceResults.push(simulateChance(gameState, i));
+    if (Math.random() < 0.5) chanceResults.push(simulateChance(gameState, 12));
   }
 
   // Update UI
@@ -5260,12 +5332,14 @@ function renderSceneField(sc, prevSc) {
   const raw = AREA_COORDS_H[sc.area] || { x: 50, y: 50 };
   const cx = toX(raw.x), cy = toY(raw.y);
   const prevRaw = prevSc ? (AREA_COORDS_H[prevSc.area] || null) : null;
-  // 矢印は「前エリア→現エリア」の論理的な前進を表す
-  // flip時はx座標が反転するため、矢印始点・終点ともにtoX()で変換するが
-  // 始点をflip前の生x座標で求めると「反転なし→反転あり」で矢印が逆になる
-  // 正解：両方toX()で変換すると両方同じ方向に反転して矢印向きが保たれる → toX()でOK
-  const pcx = prevRaw ? toX(prevRaw.x) : null;
-  const pcy = prevRaw ? toY(prevRaw.y) : null;
+  // カウンター遷移では前シーンのoffenceが変わるためflipも逆になる
+  // 前シーンの座標は前シーンのflipで計算しないと矢印方向が逆になる
+  const isCounterTransition = prevSc && (prevSc.offence !== sc.offence);
+  const prevFlip = isCounterTransition ? !flip : flip;
+  const prevToX = (px) => ((prevFlip ? (100 - px) : px) / 100) * W;
+  const prevToY = (py) => ((prevFlip ? (100 - py) : py) / 100) * H;
+  const pcx = prevRaw ? prevToX(prevRaw.x) : null;
+  const pcy = prevRaw ? prevToY(prevRaw.y) : null;
 
   const uid = `fs${currentChanceIdx}_${currentSceneIdx}`;
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -5495,7 +5569,9 @@ function htCloseLineup() {
 function _updateSubBtn() {
   const btn = document.getElementById('sub-btn');
   if (!btn) return;
-  const canSub = subsCount < 5 && subsUsed < 3 && currentChanceIdx >= 6 && currentChanceIdx < chanceResults.length;
+  const isET = wcPhase === 'et_first' || wcPhase === 'et_second';
+  const afterKickoff = isET ? currentChanceIdx > 0 : currentChanceIdx >= 6;
+  const canSub = subsCount < 5 && subsUsed < 3 && afterKickoff && currentChanceIdx < chanceResults.length;
   btn.style.display = canSub ? 'block' : 'none';
   btn.textContent = `🔄 選手交代・システム変更（残り${5 - subsCount}人/${3 - subsUsed}回）`;
 }
@@ -5554,6 +5630,20 @@ function closeSecondHalfSub() {
   document.getElementById('btn-kickoff-bottom').closest('div').style.display = '';
   document.getElementById('next-btn').disabled = false;
   document.getElementById('all-btn').disabled = false;
+  // 延長戦開始前の交代（ET開始を確定）
+  if (_wcETSubPending) {
+    _wcETSubPending = false;
+    gameState.team1.lineup = [...team1State.lineup];
+    _runWCETPhase();
+    return;
+  }
+  // 延長戦進行中の交代（残りチャンスを新lineupで再シミュレート）
+  if (wcPhase === 'et_first' || wcPhase === 'et_second') {
+    _recalcETFromCurrent();
+    showScreen('game');
+    _updateSubBtn();
+    return;
+  }
   // 後半再計算（交代反映）
   _recalcSecondHalf();
   showScreen('game');
@@ -5689,8 +5779,9 @@ function nextChance() {
       };
       return;
     }
-    // 後半中：チャンス完了時のみ交代ボタンを表示
-    if (currentChanceIdx > 6 && currentChanceIdx < chanceResults.length) {
+    // 後半・延長戦中：チャンス完了時のみ交代ボタンを表示
+    const _isET = wcPhase === 'et_first' || wcPhase === 'et_second';
+    if ((_isET ? currentChanceIdx > 0 : currentChanceIdx > 6) && currentChanceIdx < chanceResults.length) {
       _updateSubBtn();
     }
     if (currentChanceIdx >= chanceResults.length) {
@@ -6624,6 +6715,22 @@ function runMultiGame(GAMES) {
 }
 
 function showResult() {
+  // 延長前半終了時は結果画面を経由せず延長後半へ直接遷移
+  if (isWCR32Mode && wcPhase === 'et_first') {
+    wcMatchLog = chanceResults.slice(); // ET1ログを保存（ET2結果画面でET1+ET2を合算表示）
+    wcETScore.t1 += gameState.team1.score;
+    wcETScore.t2 += gameState.team2.score;
+    wcCumulativeStats.chances1 += gameState.team1.chanceCounter;
+    wcCumulativeStats.shots1   += gameState.team1.shootCounter;
+    wcCumulativeStats.saves1   += gameState.team1.gkSaveCounter;
+    wcCumulativeStats.chances2 += gameState.team2.chanceCounter;
+    wcCumulativeStats.shots2   += gameState.team2.shootCounter;
+    wcCumulativeStats.saves2   += gameState.team2.gkSaveCounter;
+    wcPhase = 'et_second';
+    _runWCETPhase();
+    return;
+  }
+
   document.getElementById('sub-btn').style.display = 'none';
   const lastRes = chanceResults[chanceResults.length - 1];
   const t1score = lastRes.t1score;
@@ -6831,10 +6938,11 @@ function showResult() {
   duelEl.innerHTML = renderDuelTable(t1Duels, team1Data) + renderDuelTable(t2Duels, team2Data)
     + '<div style="margin-top:12px"><div style="background:#555;color:white;font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px 8px 0 0">🧤 ' + (window.LANG==='en'?'GK Save Rate':'GKセーブ率') + '</div>' + gkHtml1 + '</div>';
 
-  // 試合詳細ログ
+  // 試合詳細ログ（延長後半時は90分ログと結合）
   const logContent = document.getElementById('result-log-content');
   logContent.innerHTML = '';
-  chanceResults.forEach(res => {
+  const _logSrc = (isWCR32Mode && wcPhase === 'et_second') ? wcMatchLog.concat(chanceResults) : chanceResults;
+  _logSrc.forEach(res => {
     const div = document.createElement('div');
     div.className = 'result-log-chance';
     const isGoal = res.scenes.some(s => s.result === 'ゴール！！');
@@ -6963,7 +7071,11 @@ function showResult() {
   document.getElementById('btn-home').style.display  = normalVisible ? '' : 'none';
 
   if (isWCR32Mode) {
-    updateWCR32AfterResult();
+    if (wcPhase === 'et_first' || wcPhase === 'et_second') {
+      updateWCETAfterResult();
+    } else {
+      updateWCR32AfterResult();
+    }
   } else if (isWorldCupMode) {
     updateWCAfterResult();
   }
@@ -7587,6 +7699,12 @@ function generateWCSummary() {
   });
 }
 
+function debugForceDrawPK() {
+  wcForceDrawPK = true;
+  const btn = document.getElementById('debug-forcedraw-btn');
+  if (btn) { btn.style.background = '#ffcccc'; btn.textContent = '🔧 延長PK強制 ✅ セット済み'; }
+}
+
 function showWCR32(japanRank) {
   const opponent = japanRank === 1 ? TEAM_DATA.morocco2026 : TEAM_DATA.brazil2026;
   wcR32Opponent = opponent;
@@ -7615,40 +7733,409 @@ function startWCR32Match() {
   if (!wcR32Opponent) return;
   isWorldCupMode = true;
   isWCR32Mode = true;
+  wcPhase = 'r32';
   const key = wcR32Opponent === TEAM_DATA.morocco2026 ? '2026r32vsモロッコ' : '2026r32vsブラジル';
   selectMatch(key);
 }
 
-function updateWCR32AfterResult() {
-  const t1 = parseInt(document.getElementById('result-score1').textContent);
-  const t2 = parseInt(document.getElementById('result-score2').textContent);
-  const japanWon = t1 >= t2; // 引き分けは日本の勝利扱い
-  const btn = document.getElementById('wc-result-back-btn');
-  if (btn) {
-    btn.style.display = '';
-    if (japanWon) {
-      btn.textContent = '🏆 ラウンド16へ';
-      btn.style.background = 'linear-gradient(135deg,#b8860b,#ffd700)';
-      btn.style.color = '#1a1a1a';
-      btn.onclick = () => showScreen('worldcup-r16');
+function startWCExtraTime() {
+  // 90分スコアを gameState から直接保存（DOM参照不要）
+  wcETScore = { t1: gameState.team1.score, t2: gameState.team2.score };
+  wcPhase = 'et_first';
+  isWorldCupMode = true;
+  isWCR32Mode = true;
+  const etBtn = document.getElementById('wc-et-btn');
+  if (etBtn) etBtn.style.display = 'none';
+  if (subsCount < 5 && subsUsed < 3) {
+    _wcETSubPending = true;
+    openSecondHalfSub();
+  } else {
+    _runWCETPhase();
+  }
+}
+
+
+function _recalcETFromCurrent() {
+  // 交代後のlineupを反映
+  gameState.team1.lineup = [...team1State.lineup];
+  // 現在地点のスコアを復元
+  const baseScore = currentChanceIdx > 0
+    ? { t1: chanceResults[currentChanceIdx - 1].t1score, t2: chanceResults[currentChanceIdx - 1].t2score }
+    : { t1: 0, t2: 0 };
+  gameState.team1.score = baseScore.t1;
+  gameState.team2.score = baseScore.t2;
+  // カウンターリセット（再シミュレートのため）
+  gameState.team1.chanceCounter = 0; gameState.team2.chanceCounter = 0;
+  gameState.team1.shootCounter = 0;  gameState.team2.shootCounter = 0;
+  gameState.team1.gkSaveCounter = 0; gameState.team2.gkSaveCounter = 0;
+  // 表示済みチャンスはそのまま保持し、残りを再計算
+  const total = chanceResults.length;
+  const firstPart = chanceResults.slice(0, currentChanceIdx);
+  const newPart = [];
+  for (let i = currentChanceIdx; i < total; i++) {
+    newPart.push(simulateChance(gameState, i));
+  }
+  chanceResults = [...firstPart, ...newPart];
+  document.getElementById('chance-total').textContent = chanceResults.length;
+}
+
+function _runWCETPhase() {
+  // スコア・カウンターのみリセット（lineup・players・fatigue は保持）
+  const t1 = gameState.team1, t2 = gameState.team2;
+  t1.score = 0; t2.score = 0;
+  t1.chanceCounter = 0; t2.chanceCounter = 0;
+  t1.shootCounter = 0;  t2.shootCounter = 0;
+  t1.gkSaveCounter = 0; t2.gkSaveCounter = 0;
+
+  chanceResults = [];
+  currentChanceIdx = 0;
+  currentSceneIdx = 0;
+  currentEventDiv = null;
+  halfTimeShown = false;
+
+  if (wcPhase === 'et_first') {
+    for (let i = 0; i < 3; i++) chanceResults.push(simulateChance(gameState, i));
+  } else {
+    for (let i = 0; i < 3; i++) chanceResults.push(simulateChance(gameState, i));
+    if (Math.random() < 0.5) chanceResults.push(simulateChance(gameState, 3));
+  }
+
+  document.getElementById('score-flag1').textContent = team1Data.flag;
+  document.getElementById('score-flag2').textContent = team2Data.flag;
+  document.getElementById('score-name1').textContent = getTeamName(team1Data);
+  document.getElementById('score-name2').textContent = getTeamName(team2Data);
+  document.getElementById('score1').textContent = '0';
+  document.getElementById('score2').textContent = '0';
+  document.getElementById('log-area').innerHTML = '';
+  document.getElementById('chance-count').textContent = '0';
+  document.getElementById('chance-total').textContent = chanceResults.length;
+  document.getElementById('next-btn').disabled = false;
+  document.getElementById('sub-btn').style.display = 'none';
+
+  showScreen('game');
+}
+
+function _renderWCCumulativeStats() {
+  const c = wcCumulativeStats;
+  const statsGrid = document.getElementById('stats-grid');
+  if (!statsGrid) return;
+  const rows = [
+    [c.chances1, window.LANG==='en'?'Chances':'チャンス', c.chances2],
+    [c.shots1,   window.LANG==='en'?'Shots':'シュート',   c.shots2],
+    [c.saves1,   window.LANG==='en'?'GK Saves':'GKセーブ', c.saves2],
+  ];
+  statsGrid.innerHTML = '';
+  rows.forEach(([l, label, r]) => {
+    statsGrid.innerHTML += `<div style="padding:12px 16px;text-align:center;font-size:16px;font-weight:700;border-top:1px solid rgba(0,0,0,0.08)">${l}</div><div style="padding:12px 8px;text-align:center;font-size:11px;color:var(--text-dim);display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(0,0,0,0.08)">${label}</div><div style="padding:12px 16px;text-align:center;font-size:16px;font-weight:700;border-top:1px solid rgba(0,0,0,0.08)">${r}</div>`;
+  });
+}
+
+function onWCEtBtnClick() {
+  if (wcPhase === 'pk') { startWCPK(); } else { startWCExtraTime(); }
+}
+
+function startWCPK() {
+  const firstTeam = Math.random() < 0.5 ? 1 : 2;
+  // GK(lineup[0])を除いたキッカーリスト（SHOOT_ACCURACY=params[11]の高い順）
+  const t1Kickers = gameState.team1.lineup.slice(1, 11)
+    .map(idx => gameState.team1.players[idx]).filter(Boolean)
+    .sort((a, b) => (b.params[11] || 0) - (a.params[11] || 0));
+  const t2Kickers = gameState.team2.lineup.slice(1, 11)
+    .map(idx => gameState.team2.players[idx]).filter(Boolean)
+    .sort((a, b) => (b.params[11] || 0) - (a.params[11] || 0));
+
+  pkState = {
+    firstTeam,
+    t1Kickers, t2Kickers,
+    t1KickCount: 0, t2KickCount: 0,
+    t1Kicks: [], t2Kicks: [],
+    t1Goals: 0, t2Goals: 0,
+    isSD: false, sdRound: 0,
+    phase: 'kick', done: false,
+  };
+
+  document.getElementById('pk-name1').textContent = getTeamName(team1Data);
+  document.getElementById('pk-name2').textContent = getTeamName(team2Data);
+  wcPhase = 'pk';
+  showScreen('worldcup-pk');
+  _renderPKState();
+}
+
+function _currentPKTeam() {
+  const st = pkState;
+  if (st.firstTeam === 1) {
+    return st.t1KickCount <= st.t2KickCount ? 1 : 2;
+  } else {
+    return st.t2KickCount <= st.t1KickCount ? 2 : 1;
+  }
+}
+
+function _renderPKState() {
+  const st = pkState;
+  document.getElementById('pk-score1').textContent = st.t1Goals;
+  document.getElementById('pk-score2').textContent = st.t2Goals;
+  document.getElementById('pk-kicks1').textContent = st.t1Kicks.map(g => g ? '⚽' : '❌').join('');
+  document.getElementById('pk-kicks2').textContent = st.t2Kicks.map(g => g ? '⚽' : '❌').join('');
+
+  const isSD = st.isSD;
+  const curTeam = _currentPKTeam();
+  const kickNum = curTeam === 1 ? st.t1KickCount + 1 : st.t2KickCount + 1;
+  document.getElementById('pk-round-label').textContent =
+    isSD ? `サドンデス ${st.sdRound + 1}本目` : `第${kickNum}キック`;
+
+  const isJapan = curTeam === 1;
+  const kickers = isJapan ? st.t1Kickers : st.t2Kickers;
+  const kIdx = isJapan ? st.t1KickCount : st.t2KickCount;
+  const kicker = kickers[kIdx % kickers.length];
+  const tData = isJapan ? team1Data : team2Data;
+
+  document.getElementById('pk-team-label').textContent =
+    `${tData.flag || ''} ${getTeamName(tData)} のキック`;
+  document.getElementById('pk-player-flag').textContent = tData.flag || '🏳️';
+  document.getElementById('pk-player-name').textContent = kicker ? getPlayerName(kicker) : '選手';
+  document.getElementById('pk-player-pos').textContent =
+    kicker && kicker.positions ? kicker.positions[0] : '';
+
+  document.getElementById('pk-kicker-box').style.display = '';
+  document.getElementById('pk-result-display').style.display = 'none';
+  document.getElementById('pk-kick-btn').style.display = '';
+  document.getElementById('pk-next-btn').style.display = 'none';
+}
+
+function stepWCPK_kick() {
+  const st = pkState;
+  if (!st || st.done || st.phase !== 'kick') return;
+
+  const curTeam = _currentPKTeam();
+  const scored = Math.random() < 0.75;
+
+  if (curTeam === 1) {
+    st.t1Kicks.push(scored); if (scored) st.t1Goals++;
+    st.t1KickCount++;
+  } else {
+    st.t2Kicks.push(scored); if (scored) st.t2Goals++;
+    st.t2KickCount++;
+  }
+
+  document.getElementById('pk-score1').textContent = st.t1Goals;
+  document.getElementById('pk-score2').textContent = st.t2Goals;
+  document.getElementById('pk-kicks1').textContent = st.t1Kicks.map(g => g ? '⚽' : '❌').join('');
+  document.getElementById('pk-kicks2').textContent = st.t2Kicks.map(g => g ? '⚽' : '❌').join('');
+
+  const rEmoji = document.getElementById('pk-result-emoji');
+  const rText  = document.getElementById('pk-result-text');
+  if (scored) {
+    rEmoji.textContent = '⚽'; rText.textContent = 'ゴール！'; rText.style.color = '#4ade80';
+  } else {
+    rEmoji.textContent = '❌'; rText.textContent = 'セーブ！'; rText.style.color = '#f87171';
+  }
+
+  document.getElementById('pk-kicker-box').style.display = 'none';
+  document.getElementById('pk-result-display').style.display = '';
+  document.getElementById('pk-kick-btn').style.display = 'none';
+  document.getElementById('pk-next-btn').style.display = '';
+  st.phase = 'result';
+}
+
+function _checkPKEarlyFinish() {
+  const st = pkState;
+  if (st.isSD) {
+    return st.t1KickCount === st.t2KickCount && st.t1Goals !== st.t2Goals;
+  }
+  const rem1 = Math.max(0, 5 - st.t1KickCount);
+  const rem2 = Math.max(0, 5 - st.t2KickCount);
+  if (st.t1Goals > st.t2Goals + rem2) return true;
+  if (st.t2Goals > st.t1Goals + rem1) return true;
+  if (st.t1KickCount >= 5 && st.t2KickCount >= 5) return true;
+  return false;
+}
+
+function _finishPK() {
+  const st = pkState;
+  st.done = true;
+  const japanWon = st.t1Goals > st.t2Goals;
+
+  document.getElementById('pk-kicker-box').style.display = 'none';
+  document.getElementById('pk-kick-btn').style.display = 'none';
+
+  document.getElementById('pk-result-emoji').style.display = 'none';
+  const rText  = document.getElementById('pk-result-text');
+  if (japanWon) {
+    rText.textContent = 'PK勝利'; rText.style.color = '#ffd700';
+  } else {
+    rText.textContent = 'PK敗退'; rText.style.color = '#f87171';
+  }
+  const pkImg = document.getElementById('pk-result-img');
+  const pkImgWrap = document.getElementById('pk-result-img-wrap');
+  if (pkImg && pkImgWrap) {
+    pkImg.src = japanWon ? IMG_WIN : IMG_LOSE;
+    pkImgWrap.style.display = '';
+  }
+  document.getElementById('pk-result-display').style.display = '';
+
+  const nextBtn = document.getElementById('pk-next-btn');
+  if (nextBtn) {
+    nextBtn.textContent = japanWon ? 'ラウンド16へ' : '敗退へ';
+    nextBtn.style.background = japanWon
+      ? 'linear-gradient(135deg,#b8860b,#ffd700)' : 'rgba(180,0,0,0.5)';
+    nextBtn.style.color = japanWon ? '#1a1a1a' : '#fff';
+    nextBtn.onclick = () => {
+      wcPhase = ''; isWCR32Mode = false;
+      showScreen(japanWon ? 'worldcup-r16' : 'worldcup-eliminated');
+    };
+    nextBtn.style.display = '';
+  }
+}
+
+function stepWCPK_next() {
+  const st = pkState;
+  if (!st || st.phase !== 'result') return;
+  st.phase = 'kick';
+
+  if (_checkPKEarlyFinish()) {
+    // 5本終了で引き分け → サドンデスへ
+    if (!st.isSD && st.t1KickCount >= 5 && st.t2KickCount >= 5 && st.t1Goals === st.t2Goals) {
+      st.isSD = true; st.sdRound = 0;
+      _renderPKState();
     } else {
-      btn.textContent = '😢 敗退';
-      btn.style.background = 'rgba(180,0,0,0.5)';
-      btn.style.color = '#fff';
-      btn.onclick = () => showScreen('worldcup-eliminated');
+      _finishPK();
+    }
+    return;
+  }
+
+  // SDで片方のみキック済み（もう片方がまだ） → 継続
+  if (st.isSD && st.t1KickCount !== st.t2KickCount) {
+    _renderPKState();
+    return;
+  }
+  // SDで両方キック済み → sdRoundを進める
+  if (st.isSD && st.t1KickCount === st.t2KickCount) {
+    st.sdRound++;
+  }
+
+  _renderPKState();
+}
+
+function updateWCETAfterResult() {
+  const phaseT1 = gameState.team1.score;
+  const phaseT2 = gameState.team2.score;
+
+  // 現フェーズのスタッツを累積に加算
+  wcCumulativeStats.chances1 += gameState.team1.chanceCounter;
+  wcCumulativeStats.shots1   += gameState.team1.shootCounter;
+  wcCumulativeStats.saves1   += gameState.team1.gkSaveCounter;
+  wcCumulativeStats.chances2 += gameState.team2.chanceCounter;
+  wcCumulativeStats.shots2   += gameState.team2.shootCounter;
+  wcCumulativeStats.saves2   += gameState.team2.gkSaveCounter;
+  _renderWCCumulativeStats();
+
+  if (wcPhase === 'et_second') {
+    wcETScore.t1 += phaseT1;
+    wcETScore.t2 += phaseT2;
+    document.getElementById('result-score1').textContent = wcETScore.t1;
+    document.getElementById('result-score2').textContent = wcETScore.t2;
+    // winner表示を累積スコアで更新
+    const winner = document.getElementById('result-winner');
+    if (wcETScore.t1 > wcETScore.t2) {
+      winner.textContent = `${team1Data.flag} ${getTeamName(team1Data)}${t('win')}`;
+      winner.style.color = team1Data.team_color;
+    } else if (wcETScore.t2 > wcETScore.t1) {
+      winner.textContent = `${team2Data.flag} ${getTeamName(team2Data)}${t('win')}`;
+      winner.style.color = team2Data.team_color;
+    } else {
+      winner.textContent = t('draw');
+      winner.style.color = '#aaa';
+    }
+    document.getElementById('btn-retry').style.display = 'none';
+    const btn = document.getElementById('wc-result-back-btn');
+    const etBtn = document.getElementById('wc-et-btn');
+    if (wcETScore.t1 > wcETScore.t2) {
+      if (btn) {
+        btn.style.display = '';
+        btn.textContent = '🏆 ラウンド16へ';
+        btn.style.background = 'linear-gradient(135deg,#b8860b,#ffd700)';
+        btn.style.color = '#1a1a1a';
+        btn.onclick = () => showScreen('worldcup-r16');
+      }
+      isWCR32Mode = false; wcPhase = '';
+    } else if (wcETScore.t2 > wcETScore.t1) {
+      if (btn) {
+        btn.style.display = '';
+        btn.textContent = '😢 敗退';
+        btn.style.background = 'rgba(180,0,0,0.5)';
+        btn.style.color = '#fff';
+        btn.onclick = () => showScreen('worldcup-eliminated');
+      }
+      isWCR32Mode = false; wcPhase = '';
+    } else {
+      // PK戦へ
+      if (etBtn) {
+        etBtn.textContent = '🥅 PK戦へ';
+        etBtn.style.display = '';
+      }
+      wcPhase = 'pk';
     }
   }
+}
+
+function updateWCR32AfterResult() {
+  let t1base = parseInt(document.getElementById('result-score1').textContent);
+  let t2base = parseInt(document.getElementById('result-score2').textContent);
+  if (wcForceDrawPK) {
+    t1base = 0; t2base = 0;
+    document.getElementById('result-score1').textContent = 0;
+    document.getElementById('result-score2').textContent = 0;
+    wcForceDrawPK = false;
+    const dbgBtn = document.getElementById('debug-forcedraw-btn');
+    if (dbgBtn) { dbgBtn.style.background = '#f0f0f0'; dbgBtn.textContent = '🔧 延長PK強制（次のR32試合のみ）'; }
+  }
+
+  const isDraw = t1base === t2base;
+
+  if (isDraw) {
+    // 90分スタッツを累積に保存
+    wcCumulativeStats = {
+      chances1: gameState.team1.chanceCounter, shots1: gameState.team1.shootCounter, saves1: gameState.team1.gkSaveCounter,
+      chances2: gameState.team2.chanceCounter, shots2: gameState.team2.shootCounter, saves2: gameState.team2.gkSaveCounter
+    };
+    // 引き分け → 延長戦へボタンを表示
+    const etBtn = document.getElementById('wc-et-btn');
+    if (etBtn) etBtn.style.display = '';
+  } else {
+    const japanWon = t1base > t2base;
+    const btn = document.getElementById('wc-result-back-btn');
+    if (btn) {
+      btn.style.display = '';
+      if (japanWon) {
+        btn.textContent = '🏆 ラウンド16へ';
+        btn.style.background = 'linear-gradient(135deg,#b8860b,#ffd700)';
+        btn.style.color = '#1a1a1a';
+        btn.onclick = () => showScreen('worldcup-r16');
+      } else {
+        btn.textContent = '😢 敗退';
+        btn.style.background = 'rgba(180,0,0,0.5)';
+        btn.style.color = '#fff';
+        btn.onclick = () => showScreen('worldcup-eliminated');
+      }
+    }
+    isWCR32Mode = false;
+    wcPhase = '';
+  }
+
   const retryBtn = document.getElementById('btn-retry');
   if (retryBtn) {
     retryBtn.style.display = '';
     retryBtn.onclick = () => resetWCMode();
   }
-  isWCR32Mode = false;
 }
 
 function resetWCMode() {
   wcR32Opponent = null;
   isWCR32Mode = false;
+  wcPhase = '';
+  wcETScore = {t1: 0, t2: 0};
+  wcMatchLog = [];
+  wcCumulativeStats = {chances1:0,shots1:0,saves1:0,chances2:0,shots2:0,saves2:0};
   wcMatchIndex  = 0;
   wcMatchScores = [];
   wcAutoScores  = [];
@@ -7668,6 +8155,8 @@ function resetWCMode() {
   if (doneEl) { doneEl.innerHTML=''; doneEl.style.display='none'; }
   const autoEl = document.getElementById('wc-auto-results');
   if (autoEl) { autoEl.innerHTML=''; autoEl.style.display='none'; }
+  const etPkEl = document.getElementById('wc-et-pk-result');
+  if (etPkEl) { etPkEl.innerHTML=''; etPkEl.style.display='none'; }
   renderWCTable();
   updateWCNextBtn();
   showScreen('worldcup');
